@@ -1,0 +1,13 @@
+{% extends 'global/base.html' %}
+{% load static %}
+{% block content %}
+    <section class=" m-3">
+        <h2>Index</h2>
+        <div class="center">
+            {% for sensor in sensors %}
+                <p>{{sensor.id_sen}}</p>
+                <p>{{sensor.mac}}</p>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}
