@@ -1,7 +1,13 @@
 {% extends 'global/base.html' %}
 {% load static %}
 {% block content %}
-    <section>
-        <h2>Sensors</h2>
-    </section>
+<section>
+    <h2>Sensors</h2>
+    {% for sensor in sensors %}
+        <p>{{sensor.date_hour}}</p>
+        <!-- <p>{{sensor.temperature}}</p>
+        <p>{{sensor.humidity}}</p>
+        <p>{{sensor.pressure}}</p> -->
+    {% endfor %}
+</section>
 {% endblock %}
