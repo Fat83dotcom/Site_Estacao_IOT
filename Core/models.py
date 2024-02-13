@@ -6,7 +6,8 @@ class Localization(models.Model):
     city = models.CharField(max_length=100)
     neighborhood = models.CharField(max_length=100)
     coordinate = models.CharField(
-        max_length=100, null=True, blank=True, unique=True
+        max_length=100, null=True, blank=True, unique=True,
+        default='Sem Coordenadas...'
     )
 
 
