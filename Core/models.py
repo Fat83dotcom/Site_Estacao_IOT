@@ -18,9 +18,10 @@ class Localization(models.Model):
 
 class Sensor(models.Model):
     id_sen = models.AutoField(primary_key=True)
+    owner = models.CharField(max_length=100, null=True, blank=True)
     mac = models.CharField(max_length=20, unique=True, null=False)
     id_localization = models.ForeignKey(
-        'Localization', on_delete=models.SET_NULL, null=True
+        'Localization', on_delete=models.SET_NULL, null=True, blank=True
     )
 
     def checkLocalization(self) -> bool:
