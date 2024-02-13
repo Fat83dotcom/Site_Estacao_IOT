@@ -26,29 +26,39 @@ class SensorView(View):
         idSensor = request.POST.get('selectSensor')
         if 'default' in idSensor:
             return redirect(to='index')
-        dataSensor24hrs = DataSensor.objects.filter(
-            Q(id_sensor=idSensor) & Q(
-                date_hour__range=(
-                    self.timeLast(24), self.timeNow()
-                )
-            )
-        )
-        dataSensor168hrs = DataSensor.objects.filter(
-            Q(id_sensor=idSensor) & Q(
-                date_hour__range=(
-                    self.timeLast(168), self.timeNow()
-                )
-            )
-        )
-        dataSensor720rs = DataSensor.objects.filter(
-            Q(id_sensor=idSensor) & Q(
-                date_hour__range=(
-                    self.timeLast(720), self.timeNow()
-                )
-            )
-        )
+        getAllSensors = Sensor.objects.all()
+        getCurrentSensor = Sensor.objects.filter(
+            id_sen=idSensor
+        ).prefetch_related('id_localization')
+        # dataSensor24hrs = DataSensor.objects.filter(
+        #     Q(id_sensor=idSensor) & Q(
+        #         date_hour__range=(
+        #             self.timeLast(24), self.timeNow()
+        #         )
+        #     )
+        # )
+        # dataSensor168hrs = DataSensor.objects.filter(
+        #     Q(id_sensor=idSensor) & Q(
+        #         date_hour__range=(
+        #             self.timeLast(168), self.timeNow()
+        #         )
+        #     )
+        # )
+        # dataSensor720rs = DataSensor.objects.filter(
+        #     Q(id_sensor=idSensor) & Q(
+        #         date_hour__range=(
+        #             self.timeLast(720), self.timeNow()
+        #         )
+        #     )
+        # )
+        for i in getCurrentSensor:
+            print(i.id_sen)
+            print(i.mac)
+            print(i.id_localization)
         context = {
-            'sensors': dataSensor24hrs,
+            'dataSensors': 3,
+            'getSensors': getAllSensors,
+            'currentSensor': getCurrentSensor,
         }
         return render(request, self.template, context)
 
