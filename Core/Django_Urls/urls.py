@@ -1,7 +1,7 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from Core.views import Index, SensorView, AboutView
+from Core.Views.views import Index, SensorView, AboutView
 
 
 urlpatterns = [
@@ -11,4 +11,3 @@ urlpatterns = [
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-print(urlpatterns)

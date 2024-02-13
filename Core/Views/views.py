@@ -1,10 +1,6 @@
-import datetime
-from django.db.models import Q
-from datetime import timedelta
-from django.utils import timezone
 from django.http import HttpResponse
 from django.views.generic import View
-from Core.models import Sensor, DataSensor
+from Core.models import Sensor
 from django.shortcuts import render, redirect
 
 
@@ -30,30 +26,8 @@ class SensorView(View):
         getCurrentSensor = Sensor.objects.filter(
             id_sen=idSensor
         ).prefetch_related('id_localization')
-        # dataSensor24hrs = DataSensor.objects.filter(
-        #     Q(id_sensor=idSensor) & Q(
-        #         date_hour__range=(
-        #             self.timeLast(24), self.timeNow()
-        #         )
-        #     )
-        # )
-        # dataSensor168hrs = DataSensor.objects.filter(
-        #     Q(id_sensor=idSensor) & Q(
-        #         date_hour__range=(
-        #             self.timeLast(168), self.timeNow()
-        #         )
-        #     )
-        # )
-        # dataSensor720rs = DataSensor.objects.filter(
-        #     Q(id_sensor=idSensor) & Q(
-        #         date_hour__range=(
-        #             self.timeLast(720), self.timeNow()
-        #         )
-        #     )
-        # )
 
         context = {
-            'dataSensors': 3,
             'getSensors': getAllSensors,
             'currentSensor': getCurrentSensor,
         }
@@ -61,12 +35,6 @@ class SensorView(View):
 
     def get(self, request) -> HttpResponse:
         return redirect(to='index')
-
-    def timeNow(self) -> datetime:
-        return timezone.now()
-
-    def timeLast(self, hoursAgo) -> datetime:
-        return self.timeNow() - timedelta(hours=hoursAgo)
 
 
 class AboutView(View):
