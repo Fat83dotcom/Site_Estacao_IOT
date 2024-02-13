@@ -1,3 +1,15 @@
+:root{
+    --gray-color-1: #dcdcdc;
+    --gray-color-2: #d3d3d3;
+    --gray-color-3: #c9c9c9;
+    --gray-color-4: #bdbdbd;
+    --gray-color-5: #a7a7a7;
+    --inverted-gray-color-1: #232323;
+    --inverted-gray-color-2: #2c2c2c;
+    --inverted-gray-color-3: #363636;
+    --inverted-gray-color-4: #424242;
+    --inverted-gray-color-5: #585858;
+}
 *{
     box-sizing: border-box;
 }
