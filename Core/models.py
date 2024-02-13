@@ -10,6 +10,11 @@ class Localization(models.Model):
         default='Sem Coordenadas...'
     )
 
+    def __str__(self) -> str:
+        str_ = super().__str__()
+        str_ = f'{self.city} : {self.neighborhood}'
+        return str_
+
 
 class Sensor(models.Model):
     id_sen = models.AutoField(primary_key=True)
@@ -17,6 +22,13 @@ class Sensor(models.Model):
     id_localization = models.ForeignKey(
         'Localization', on_delete=models.SET_NULL, null=True
     )
+
+    def checkLocalization(self) -> bool:
+        return True if self.id_localization is not None else False
+
+    def __str__(self) -> str:
+        return f'{self.id_sen} : {self.owner} -> {self.id_localization.city}' \
+            if self.checkLocalization() else f'{self.id_sen} : {self.owner}'
 
 
 class DataSensor(models.Model):
@@ -28,3 +40,7 @@ class DataSensor(models.Model):
     id_sensor = models.ForeignKey(
         'Sensor', on_delete=models.CASCADE, null=False
     )
+
+    def __str__(self):
+        str_ = f'{self.id_data_sensor}-> {self.id_sensor.id_sen}-> {self.date_hour}'
+        return str_
