@@ -20,10 +20,11 @@ body, html{
     height: 100%;
 }
 body{
+    color: var(--gray-color-1)!important;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
-    background-color: ghostwhite;
+    background-color: var(--inverted-gray-color-1)!important;
 }
 .center{
     width: 100%;
