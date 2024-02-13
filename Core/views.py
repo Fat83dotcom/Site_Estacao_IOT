@@ -51,10 +51,7 @@ class SensorView(View):
         #         )
         #     )
         # )
-        for i in getCurrentSensor:
-            print(i.id_sen)
-            print(i.mac)
-            print(i.id_localization)
+
         context = {
             'dataSensors': 3,
             'getSensors': getAllSensors,
