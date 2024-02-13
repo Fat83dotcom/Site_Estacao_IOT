@@ -34,3 +34,23 @@ body{
     align-items: center;
     flex-direction: column;
 }
+/* offset-x | offset-y | blur-radius | spread-radius | color */
+.down-shad{
+    box-shadow: 0px 5px 7px rgba(0, 0, 0, 0.3);
+}
+.up-shad{
+    box-shadow: 0px -5px 7px rgba(0, 0, 0, 0.3);
+}
+.change-color-header{
+    background-color: var(--inverted-gray-color-2)!important;
+}
+.change-font-gray-color-2{
+    color: var(--gray-color-2)!important;
+}
+.sensor-info-background{
+    color: var(--inverted-gray-color-3);
+    background-color: var(--gray-color-3);
+}
+.sensor-info-format{
+    border-radius: 3px;
+}
