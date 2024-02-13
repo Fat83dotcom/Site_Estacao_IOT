@@ -3,7 +3,7 @@
 {% block content %}
 <section class=" m-3">
     <h2 class="m-3 text-center">Escolha um sensor para analisar seus dados.</h2>
-    <form action="{% url 'sensor' %}" method="post">
+    <form class="m-5" action="{% url 'sensor' %}" method="post">
         {% csrf_token %}
         <select name="selectSensor" class="form-select" aria-label="Default select example">
             <option selected value="default">Selecione um Sensor</option>
