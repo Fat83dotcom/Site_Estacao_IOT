@@ -2,12 +2,73 @@
 {% load static %}
 {% block content %}
 <section>
-    <h2>Sensors</h2>
-    {% for sensor in sensors %}
-        <p>{{sensor.date_hour}}</p>
-        <!-- <p>{{sensor.temperature}}</p>
-        <p>{{sensor.humidity}}</p>
-        <p>{{sensor.pressure}}</p> -->
-    {% endfor %}
+    <h2 class="text-center">Sensor</h2>
+    <section class="container">
+        <section class="container-fluid text-center">
+            <div class="row row-col-2">
+                <div
+                class="col d-flex align-items-start flex-column justify-content-around sensor-info-background sensor-info-format m-3">
+                    <p class="m-3 text-center">Localização:</p>
+                    {% for data in currentSensor %}
+                    <p class="m-3">{{data.id_localization.city}}</p>
+                    <p class="m-3">{{data.id_localization.coordinate}}</p>
+                    {% endfor %}
+                </div>
+                <div class="col sensor-info-background sensor-info-format m-3">
+                    <section class=" m-3">
+                        <h2 class="m-3 text-center">Trocar o sensor.</h2>
+                        <form class="m-5" action="{% url 'sensor' %}" method="post">
+                            {% csrf_token %}
+                            <select name="selectSensor" class="form-select" aria-label="Default select example">
+                                <option selected value="default">Selecione um Sensor</option>
+                                {% for sensor in getSensors %}
+                                <option value="{{sensor.id_sen}}">{{sensor.mac}}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="m-3 text-center">
+                                <button type="submit" class="btn btn-dark">Buscar</button>
+                            </div>
+                        </form>
+                    </section>
+                </div>
+            </div>
+        </section>
+        <div>
+            <section>
+                aqui gráficos
+                <div></div>
+                <div></div>
+            </section>
+            <section>
+                aqui gráficos
+                <div></div>
+                <div></div>
+            </section>
+            <section>
+                aqui gráficos
+                <div></div>
+                <div></div>
+            </section>
+        </div>
+        <div>
+            media e desvio padrão
+            <section></section>
+            <section></section>
+            <section></section>
+            <section></section>
+        </div>
+        <div>
+            estatisticas ano
+            <section></section>
+            <section></section>
+            <section></section>
+        </div>
+        <div>
+            gráficos ano
+            <section></section>
+            <section></section>
+            <section></section>
+        </div>
+    </section>
 </section>
 {% endblock %}
