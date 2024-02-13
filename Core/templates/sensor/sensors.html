@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 <section class="container-fluid text-center">
-    <h2 class="text-center">Sensor</h2>
+    <h2 class="text-center m-3">Sensor</h2>
     <div class="row row-col-2">
         <section
             class="col d-flex align-items-start flex-column justify-content-around sensor-info-background sensor-info-format m-2">
@@ -12,44 +12,58 @@
             <p class="m-3">{{data.id_localization.coordinate}}</p>
             {% endfor %}
         </section>
-        <div class="col sensor-info-background sensor-info-format m-2">
-            <section>
-                <h4 class="m-3 text-center">Trocar o sensor.</h4>
-                <form class="m-2" action="{% url 'sensor' %}" method="post">
-                    {% csrf_token %}
-                    <select name="selectSensor" class="form-select" aria-label="Default select example">
-                        <option selected value="default">Selecione um Sensor</option>
-                        {% for sensor in getSensors %}
-                        <option value="{{sensor.id_sen}}">{{sensor.mac}}</option>
-                        {% endfor %}
-                    </select>
-                    <div class="m-3 text-center">
-                        <button type="submit" class="btn btn-dark">Buscar</button>
-                    </div>
-                </form>
-            </section>
-        </div>
-    </div>
-
-    <div>
-        <section>
-            aqui gráficos
-            <div></div>
-            <div></div>
-        </section>
-        <section>
-            aqui gráficos
-            <div></div>
-            <div></div>
-        </section>
-        <section>
-            aqui gráficos
-            <div></div>
-            <div></div>
+        <section class="col sensor-info-background sensor-info-format m-2">
+            <h4 class="m-3 text-center">Trocar o sensor.</h4>
+            <form class="m-2" action="{% url 'sensor' %}" method="post">
+                {% csrf_token %}
+                <select name="selectSensor" class="form-select" aria-label="Default select example">
+                    <option selected value="default">Selecione um Sensor</option>
+                    {% for sensor in getSensors %}
+                    <option value="{{sensor.id_sen}}">{{sensor.mac}}</option>
+                    {% endfor %}
+                </select>
+                <div class="m-3 text-center">
+                    <button type="submit" class="btn btn-dark">Buscar</button>
+                </div>
+            </form>
         </section>
     </div>
+    <h2 class="text-center m-3">Gráficos</h2>
+    <h2 class="text-center m-3">Registros das últimas 24 hrs.</h2>
+    <div class="row">
+        <section class="col">
+            <h3 class="text-center m-3">Temperatura</h3>
+            <div>
+                <canvas id="tempLast24"></canvas>
+            </div>
+            <div></div>
+            <div>
+                <canvas id="tempDvStdLast24"></canvas>
+            </div>
+        </section>
+        <section>
+            <h3 class="text-center m-3">Umidade</h3>
+            <div>
+                <canvas id="humiLast24"></canvas>
+            </div>
+            <div></div>
+            <div>
+                <canvas id="humiDvStdLast24"></canvas>
+            </div>
+        </section>
+        <section>
+            <h3 class="text-center m-3">Pressão</h3>
+            <div>
+                <canvas id="pressLast24"></canvas>
+            </div>
+            <div></div>
+            <div>
+                <canvas id="pressDvStdLast24"></canvas>
+            </div>
+        </section>
+    </div>
     <div>
-        media e desvio padrão
+        dispersão temperatura x Umidade
         <section></section>
         <section></section>
         <section></section>
