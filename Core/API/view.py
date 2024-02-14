@@ -1,10 +1,11 @@
-from Core.models import DataSensor
 from django.db.models import Q
-from rest_framework.response import Response
+from Core.models import DataSensor
 from rest_framework import serializers
 from rest_framework.views import APIView
-from django.shortcuts import get_object_or_404
+from rest_framework.response import Response
+from django.shortcuts import get_list_or_404
 from Core.Utils.classesUtils import TimeUtils
+import re
 
 
 class GraphSerializer(serializers.ModelSerializer):
