@@ -1,19 +1,19 @@
 {% extends 'global/base.html' %}
 {% load static %}
 {% block content %}
-<section class=" m-3">
-    <h2 class="m-3 text-center">Escolha um sensor para analisar seus dados.</h2>
-    <form class="m-5" action="{% url 'sensor' %}" method="post">
-        {% csrf_token %}
-        <select name="selectSensor" class="form-select" aria-label="Default select example">
-            <option selected value="default">Selecione um Sensor</option>
-            {% for sensor in sensors %}
-                <option value="{{sensor.id_sen}}">{{sensor.mac}}</option>
-            {% endfor %}
-        </select>
-        <div class="m-3 text-center">
-            <button type="submit" class="btn btn-dark">Buscar</button>
-        </div>
-    </form>
-</section>
+            <section class=" m-3">
+                <h2 class="m-3 text-center">Escolha um sensor para analisar seus dados.</h2>
+                <form class="m-5" action="{% url 'sensor' %}" method="post">
+                    {% csrf_token %}
+                    <select name="selectSensor" class="form-select" aria-label="Default select example">
+                        <option selected value="default">Selecione um Sensor</option>
+                        {% for sensor in sensors %}
+                            <option value="{{sensor.id_sen}}">{{sensor.mac}}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="m-3 text-center">
+                        <button type="submit" class="btn btn-dark">Buscar</button>
+                    </div>
+                </form>
+            </section>
 {% endblock %}
