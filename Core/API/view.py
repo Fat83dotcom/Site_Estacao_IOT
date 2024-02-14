@@ -15,6 +15,13 @@ class GraphSerializer(serializers.ModelSerializer):
             'date_hour', 'temperature', 'humidity', 'pressure'
         ]
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        reg = r"(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})-\d{2}:\d{2}"
+        sub = r"\3/\2/\1 \4:\5:\6"
+        data['date_hour'] = re.sub(reg, sub, data['date_hour'])
+        return data
+
 
 class QueryData:
     @classmethod
