@@ -30,6 +30,7 @@
     </div>
     <h2 class="text-center m-3">Gráficos</h2>
     <h2 class="text-center m-3">Registros das últimas 24 hrs.</h2>
+    
     <div class="row">
         <section class="col">
             <h3 class="text-center m-3">Temperatura</h3>
@@ -83,4 +84,33 @@
     </div>
 
 </section>
+<script>
+   
+    
+    let urlAPI = 'http://127.0.0.1:8000/api/data_graph_24/{{idSensor}}'
+    
+    fetch(urlAPI)
+    .then(response => {
+            if (response.status !== 200) throw new Error(
+                'Dados não encontrados: ' + response.statusText
+            )
+            return response.json()
+        })
+        .then(data => {
+            let date = []
+            let temperature = []
+            let humidity = []
+            let pressure = []
+            data.forEach(element => {
+                date.push(element.date_hour)
+                temperature.push(element.temperature)
+                humidity.push(element.humidity)
+                pressure.push(element.pressure)
+            })
+            updateCharts(date, temperature)
+        })
+        </script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.3/dist/chart.umd.min.js"></script>
+<script src="{% static 'scripts/chartFactoryLast24.js' %}"></script>
+
 {% endblock %}
