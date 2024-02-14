@@ -30,6 +30,7 @@ class SensorView(View):
         context = {
             'getSensors': getAllSensors,
             'currentSensor': getCurrentSensor,
+            'idSensor': idSensor,
         }
         return render(request, self.template, context)
 
