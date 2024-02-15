@@ -32,7 +32,7 @@ class QueryData:
                     TimeUtils.timeLast(time), TimeUtils.timeNow()
                 )
             )
-        )
+        ).order_by('pk')
 
 
 class Graph24Hrs(APIView):
