@@ -30,14 +30,14 @@
     </div>
     <h2 class="text-center m-3">Gráficos</h2>
     <h2 class="text-center m-3">Registros das últimas 24 hrs.</h2>
-    
+
     <div class="row">
         <section class="col">
             <h3 class="text-center m-3">Temperatura</h3>
             <div>
                 <canvas id="tempLast24"></canvas>
             </div>
-            <div></div>
+            <h3 class="text-center m-3">Média e Desvio Padrão Temperatura</h3>
             <div>
                 <canvas id="tempDvStdLast24"></canvas>
             </div>
@@ -85,12 +85,10 @@
 
 </section>
 <script>
-   
-    
     let urlAPI = 'http://127.0.0.1:8000/api/data_graph_24/{{idSensor}}'
-    
+
     fetch(urlAPI)
-    .then(response => {
+        .then(response => {
             if (response.status !== 200) throw new Error(
                 'Dados não encontrados: ' + response.statusText
             )
@@ -109,7 +107,7 @@
             })
             updateCharts(date, temperature)
         })
-        </script>
+</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.3/dist/chart.umd.min.js"></script>
 <script src="{% static 'scripts/chartFactoryLast24.js' %}"></script>
 
