@@ -6,7 +6,7 @@ from django.utils import timezone
 class TimeUtils:
     @classmethod
     def timeNow(self) -> datetime:
-        return timezone.now()
+        return timezone.localtime()
 
     @classmethod
     def timeLast(self, hoursAgo) -> datetime:
