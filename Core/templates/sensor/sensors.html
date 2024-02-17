@@ -33,32 +33,20 @@
 
     <div class="row">
         <section class="col">
-            <h3 class="text-center m-3">Temperatura</h3>
-            <div>
-                <canvas id="tempLast24"></canvas>
-            </div>
             <h3 class="text-center m-3">Média e Desvio Padrão Temperatura</h3>
-            <div>
+            <div class="graphs-background p-3">
                 <canvas id="tempDvStdLast24"></canvas>
             </div>
         </section>
         <section>
-            <h3 class="text-center m-3">Umidade</h3>
-            <div>
-                <canvas id="humiLast24"></canvas>
-            </div>
-            <div></div>
-            <div>
+            <h3 class="text-center m-3">Média e Desvio Padrão Temperatura</h3>
+            <div class="graphs-background p-3">
                 <canvas id="humiDvStdLast24"></canvas>
             </div>
         </section>
         <section>
-            <h3 class="text-center m-3">Pressão</h3>
-            <div>
-                <canvas id="pressLast24"></canvas>
-            </div>
-            <div></div>
-            <div>
+            <h3 class="text-center m-3">Média e Desvio Padrão Temperatura</h3>
+            <div class="graphs-background p-3">
                 <canvas id="pressDvStdLast24"></canvas>
             </div>
         </section>
@@ -88,9 +76,12 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.3/dist/chart.umd.min.js"></script>
 <script src="{% static 'scripts/chartFactoryLast24.js' %}"></script>
 <script>   
-    window.onload = () => {
+    window.onload = () => { 
         chartAPIEngine(urlAPI)
     }
+    // setInterval(() => {
+    //     chartAPIEngine(urlAPI)
+    // }, 60000);
 </script>
 
 {% endblock %}
