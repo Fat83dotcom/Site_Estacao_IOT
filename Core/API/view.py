@@ -50,10 +50,11 @@ class Graph24Hrs(APIView):
 
 
 class Graph168Hrs(APIView):
-    def get(self, request, pk):
+    def get(self, request, *args, **kwargs):
         dataSensor = get_list_or_404(
-            QueryData.query(sensor=pk, model=DataSensor, time=168),
-
+            QueryData.query(
+                sensor=kwargs.get('sensor'), model=DataSensor, time=168
+            )
         )
         serializer = GraphSerializer(
             instance=dataSensor,
@@ -63,10 +64,11 @@ class Graph168Hrs(APIView):
 
 
 class Graph720Hrs(APIView):
-    def get(self, request, pk):
+    def get(self, request, *args, **kwargs):
         dataSensor = get_list_or_404(
-            QueryData.query(sensor=pk, model=DataSensor, time=720),
-
+            QueryData.query(
+                sensor=kwargs.get('sensor'), model=DataSensor, time=720
+            )
         )
         serializer = GraphSerializer(
             instance=dataSensor,
