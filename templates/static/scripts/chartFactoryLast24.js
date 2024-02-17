@@ -1,36 +1,3 @@
-
-let config1 = {
-  type: 'line',
-  data: {
-    labels: [],
-    datasets: [{
-      label: "Temperatura",
-      data: [],
-      borderWidth: 0.5,
-      fill: 'origin',
-      pointRadius: 1,
-      cubicInterpolationMode: 'monotone',
-      backgroundColor: 'rgba(153, 102, 255, 0.6)',
-    }]
-  },
-
-  options: {
-    scales: {
-      y: {
-        display: true,
-        scaleLabel: {
-          display: true,
-          labelString: 'Temperatura'
-        },
-        beginAtZero: true,
-        ticks: {
-          callback: value => `${value} °C`
-        }
-      }
-    }
-  }
-};
-
 let config1DvStd = {
   type: 'line',
   options: {
@@ -65,38 +32,6 @@ let config1DvStd = {
   data: {
     labels: [],
     datasets: [],
-  }
-};
-
-let config2 = {
-  type: 'line',
-  data: {
-    labels: [],
-    datasets: [{
-      label: "Temperatura",
-      data: [],
-      borderWidth: 0.5,
-      fill: 'origin',
-      pointRadius: 1,
-      cubicInterpolationMode: 'monotone',
-      backgroundColor: 'rgba(153, 102, 255, 0.6)',
-    }]
-  },
-
-  options: {
-    scales: {
-      y: {
-        display: true,
-        scaleLabel: {
-          display: true,
-          labelString: 'Temperatura'
-        },
-        beginAtZero: true,
-        ticks: {
-          callback: value => `${value} °C`
-        }
-      }
-    }
   }
 };
 
@@ -137,38 +72,6 @@ let config2DvStd = {
   }
 };
 
-let config3 = {
-  type: 'line',
-  data: {
-    labels: [],
-    datasets: [{
-      label: "Temperatura",
-      data: [],
-      borderWidth: 0.5,
-      fill: 'origin',
-      pointRadius: 1,
-      cubicInterpolationMode: 'monotone',
-      backgroundColor: 'rgba(153, 102, 255, 0.6)',
-    }]
-  },
-
-  options: {
-    scales: {
-      y: {
-        display: true,
-        scaleLabel: {
-          display: true,
-          labelString: 'Temperatura'
-        },
-        beginAtZero: true,
-        ticks: {
-          callback: value => `${value} °C`
-        }
-      }
-    }
-  }
-};
-
 let config3DvStd = {
   type: 'line',
   options: {
@@ -206,19 +109,13 @@ let config3DvStd = {
   }
 };
 
-const chartTemperatureDoc = document.getElementById('tempLast24')
 const chartDvStdTemperatureDoc = document.getElementById('tempDvStdLast24').getContext('2d')
-const chartTemperature = new Chart(chartTemperatureDoc, config1)
 const chartTempDvStdLast24 = new Chart(chartDvStdTemperatureDoc, config1DvStd)
 
-const chartHumidityDoc = document.getElementById('humiLast24')
 const chartDvStdHumidityDoc = document.getElementById('humiDvStdLast24').getContext('2d')
-const chartHumidity = new Chart(chartHumidityDoc, config2)
 const chartHumiDvStdLast24 = new Chart(chartDvStdHumidityDoc, config2DvStd)
 
-const chartPressureDoc = document.getElementById('pressLast24')
 const chartDvStdPressureDoc = document.getElementById('pressDvStdLast24').getContext('2d')
-const chartPressure = new Chart(chartPressureDoc, config3)
 const chartPressDvStdLast24 = new Chart(chartDvStdPressureDoc, config3DvStd)
 
 const average = (dataArray) => {
@@ -231,15 +128,6 @@ const stdDeviation = (dataArray) => {
   ) / dataArray.length).toFixed(2)
 }
 
-
-const updateChartsTemp = (date, temperature) => {
-  config1.data.labels = date
-  config1.data.datasets.forEach(element => {
-    element.data = temperature
-  });
-  chartTemperature.update()
-};
-
 const updateChartsTempStdDeviation = (date, temperature) => {
   let aver = average(temperature)
   let stdD = stdDeviation(temperature)
@@ -248,12 +136,12 @@ const updateChartsTempStdDeviation = (date, temperature) => {
   config1DvStd.data.datasets.push(
     {
       label: 'Temperatura',
-      data: [...temperature],
-      borderWidth: 0.5,
-      pointRadius: 1,
+      data: temperature,
+      borderWidth: 1,
+      pointRadius: 1.5,
       fill: false,
       cubicInterpolationMode: 'monotone',
-      backgroundColor: 'rgba(153, 102, 255, 0.6)',
+      backgroundColor: 'rgb(35, 35, 35)',
     }
   )
   config1DvStd.data.datasets.push(
@@ -276,7 +164,9 @@ const updateChartsTempStdDeviation = (date, temperature) => {
       data: Array(date.length).fill(aver),
       borderColor: 'red',
       borderWidth: 1,
-      fill: false
+      fill: false,
+      borderDash: [5, 5],
+      pointStyle: 'dash',
     }
   )
   config1DvStd.data.datasets.push(
@@ -296,34 +186,26 @@ const updateChartsTempStdDeviation = (date, temperature) => {
   chartTempDvStdLast24.update()
 };
 
-const updateChartsHumi = (date, humidity) => {
-  config2.data.labels = date
-  config2.data.datasets.forEach(element => {
-    element.data = humidity
-  });
-  chartHumidity.update()
-};
-
 const updateChartsHumiStdDeviation = (date, humidity) => {
-  let aver = average(humidity)
-  let stdD = stdDeviation(humidity)
+  var aver = average(humidity)
+  var stdD = stdDeviation(humidity)
 
   config2DvStd.data.labels = date
   config2DvStd.data.datasets.push(
     {
       label: 'Humidade',
-      data: [...humidity],
+      data: humidity,
       borderWidth: 0.5,
-      pointRadius: 1,
+      pointRadius: 1.5,
       fill: false,
       cubicInterpolationMode: 'monotone',
-      backgroundColor: 'rgba(153, 102, 255, 0.6)',
+      backgroundColor: 'rgb(35, 35, 35)',
     }
   )
   config2DvStd.data.datasets.push(
     {
-      label: 'Desvio PadrãoSuperior',
-      data: Array(date.length).fill(aver + stdD),
+      label: 'Desvio Padrão Superior',
+      data: Array(date.length).fill(stdD + aver),
       borderColor: 'green',
       borderWidth: 1,
       fill: {
@@ -340,7 +222,9 @@ const updateChartsHumiStdDeviation = (date, humidity) => {
       data: Array(date.length).fill(aver),
       borderColor: 'red',
       borderWidth: 1,
-      fill: false
+      fill: false,
+      borderDash: [5, 5],
+      pointStyle: 'line',
     }
   )
   config2DvStd.data.datasets.push(
@@ -360,28 +244,20 @@ const updateChartsHumiStdDeviation = (date, humidity) => {
   chartHumiDvStdLast24.update()
 };
 
-const updateChartsPress = (date, pressure) => {
-  config3.data.labels = date
-  config3.data.datasets.forEach(element => {
-    element.data = pressure
-  });
-  chartPressure.update()
-};
-
 const updateChartsPressStdDeviation = (date, pressure) => {
-  let aver = average(pressure)
-  let stdD = stdDeviation(pressure)
+  var aver = average(pressure)
+  var stdD = stdDeviation(pressure)
 
   config3DvStd.data.labels = date
   config3DvStd.data.datasets.push(
     {
       label: 'Pressão',
-      data: [...pressure],
+      data: pressure,
       borderWidth: 0.5,
-      pointRadius: 1,
+      pointRadius: 1.5,
       fill: false,
       cubicInterpolationMode: 'monotone',
-      backgroundColor: 'rgba(153, 102, 255, 0.6)',
+      backgroundColor: 'rgb(35, 35, 35)',
     }
   )
   config3DvStd.data.datasets.push(
@@ -404,7 +280,9 @@ const updateChartsPressStdDeviation = (date, pressure) => {
       data: Array(date.length).fill(aver),
       borderColor: 'red',
       borderWidth: 1,
-      fill: false
+      fill: false,
+      borderDash: [5, 5],
+      pointStyle: 'dash',
     }
   )
   config3DvStd.data.datasets.push(
@@ -443,11 +321,53 @@ const chartAPIEngine = url => {
         humidity.push(element.humidity)
         pressure.push(element.pressure)
       })
-      updateChartsTemp(date, temperature)
       updateChartsTempStdDeviation(date, temperature)
-      updateChartsHumi(date, humidity)
       updateChartsHumiStdDeviation(date, humidity)
-      updateChartsPress(date, pressure)
       updateChartsPressStdDeviation(date, pressure)
     })
 }
+
+
+
+
+// let config1 = {
+//   type: 'line',
+//   data: {
+//     labels: [],
+//     datasets: [{
+//       label: "Temperatura",
+//       data: [],
+//       borderWidth: 0.5,
+//       fill: 'origin',
+//       pointRadius: 1,
+//       cubicInterpolationMode: 'monotone',
+//       backgroundColor: 'rgba(153, 102, 255, 0.6)',
+//     }]
+//   },
+
+//   options: {
+//     scales: {
+//       y: {
+//         display: true,
+//         scaleLabel: {
+//           display: true,
+//           labelString: 'Temperatura'
+//         },
+//         beginAtZero: true,
+//         ticks: {
+//           callback: value => `${value} °C`
+//         }
+//       }
+//     }
+//   }
+// };
+
+
+
+// const updateChartsTemp = (date, temperature) => {
+//   config1.data.labels = date
+//   config1.data.datasets.forEach(element => {
+//     element.data = temperature
+//   });
+//   chartTemperature.update()
+// };
