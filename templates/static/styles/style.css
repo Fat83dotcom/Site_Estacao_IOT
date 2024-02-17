@@ -46,3 +46,7 @@ body{
 .sensor-info-format{
     border-radius: 3px;
 }
+.graphs-background{
+    background-color: var(--gray-color-4);
+    border-radius: 3px;
+}
