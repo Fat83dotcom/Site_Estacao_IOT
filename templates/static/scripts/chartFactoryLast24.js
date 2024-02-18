@@ -1,140 +1,43 @@
-let config1DvStd = {
-  type: 'line',
-  options: {
-    responsive: true,
-    maintainAspectRatio: true,
-    scales: {
-      x: {
-        display: true,
-        scaleLabel: {
+const graphConfigFactory = (ticks) => {
+  return {
+    type: 'line',
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {
+        x: {
           display: true,
-          labelString: 'Últimas 24 horas',
+          scaleLabel: {
+            display: true,
+            labelString: '',
+          }
+        },
+        y: {
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: '',
+          },
+          beginAtZero: false,
+          ticks: {
+            callback: value => `${value} ${ticks}`,
+          }
         }
       },
-      y: {
-        display: true,
-        scaleLabel: {
-          display: true,
-          labelString: 'Temperatura',
-        },
-        beginAtZero: false,
-        ticks: {
-          callback: value => `${value} °C`,
-        }
-      }
     },
-  },
-  plugins: [
-    {
-      filler: {
-        propagate: true,
+    plugins: [
+      {
+        filler: {
+          propagate: true,
+        }
+  
       }
-
+    ],
+    data: {
+      labels: [],
+      datasets: [],
     }
-  ],
-  data: {
-    labels: [],
-    datasets: [],
-  }
-};
-
-let config2DvStd = {
-  type: 'line',
-  options: {
-    responsive: true,
-    maintainAspectRatio: true,
-    scales: {
-      x: {
-        display: true,
-        scaleLabel: {
-          display: true,
-          labelString: 'Últimas 24 horas',
-        }
-      },
-      y: {
-        display: true,
-        scaleLabel: {
-          display: true,
-          labelString: 'Humidade',
-        },
-        beginAtZero: false,
-        ticks: {
-          callback: value => `${value} %`,
-        }
-      }
-    },
-  },
-  plugins: [
-    {
-      filler: {
-        propagate: true,
-      }
-
-    }
-  ],
-  data: {
-    labels: [],
-    datasets: [],
-  }
-};
-
-let config3DvStd = {
-  type: 'line',
-  options: {
-    responsive: true,
-    maintainAspectRatio: true,
-    scales: {
-      x: {
-        display: true,
-        scaleLabel: {
-          display: true,
-          labelString: 'Últimas 24 horas',
-        }
-      },
-      y: {
-        display: true,
-        scaleLabel: {
-          display: true,
-          labelString: 'Pressão',
-        },
-        beginAtZero: false,
-        ticks: {
-          callback: value => `${value} hPa`,
-        }
-      }
-    },
-  },
-  plugins: [
-    {
-      filler: {
-        propagate: true,
-      }
-
-    }
-  ],
-  data: {
-    labels: [],
-    datasets: [],
-  }
-};
-
-const chartDvStdTemperatureDoc = document.getElementById('tempDvStdLast24').getContext('2d')
-const chartTempDvStdLast24 = new Chart(chartDvStdTemperatureDoc, config1DvStd)
-
-const chartDvStdHumidityDoc = document.getElementById('humiDvStdLast24').getContext('2d')
-const chartHumiDvStdLast24 = new Chart(chartDvStdHumidityDoc, config2DvStd)
-
-const chartDvStdPressureDoc = document.getElementById('pressDvStdLast24').getContext('2d')
-const chartPressDvStdLast24 = new Chart(chartDvStdPressureDoc, config3DvStd)
-
-const average = (dataArray) => {
-  return (dataArray.reduce((a, b) => a + b, 0) / dataArray.length)
-}
-
-const stdDeviation = (dataArray) => {
-  return Math.sqrt(
-    dataArray.reduce((acc, val) => acc + Math.pow(val - average(dataArray), 2), 0
-  ) / dataArray.length)
+  };
 }
 
 const fillerStdAverange = (object, arrayTarget, average, stdDeviation) => {
@@ -180,6 +83,22 @@ const fillerStdAverange = (object, arrayTarget, average, stdDeviation) => {
     object.data.datasets.push(element)
   })
 }
+
+const average = (dataArray) => {
+  return (dataArray.reduce((a, b) => a + b, 0) / dataArray.length)
+}
+
+const stdDeviation = (dataArray) => {
+  return Math.sqrt(
+    dataArray.reduce((acc, val) => acc + Math.pow(val - average(dataArray), 2), 0
+  ) / dataArray.length)
+}
+
+let config1DvStd = graphConfigFactory('°C')
+
+let config2DvStd = graphConfigFactory('%')
+
+let config3DvStd = graphConfigFactory('hPa')
 
 const updateChartsTempStdDeviation = (date, temperature) => {
   let aver = average(temperature)
@@ -241,6 +160,15 @@ const updateChartsPressStdDeviation = (date, pressure) => {
   fillerStdAverange(config3DvStd, date, aver, stdD)
   chartPressDvStdLast24.update()
 };
+
+const chartDvStdTemperatureDoc = document.getElementById('tempDvStdLast24').getContext('2d')
+const chartTempDvStdLast24 = new Chart(chartDvStdTemperatureDoc, config1DvStd)
+
+const chartDvStdHumidityDoc = document.getElementById('humiDvStdLast24').getContext('2d')
+const chartHumiDvStdLast24 = new Chart(chartDvStdHumidityDoc, config2DvStd)
+
+const chartDvStdPressureDoc = document.getElementById('pressDvStdLast24').getContext('2d')
+const chartPressDvStdLast24 = new Chart(chartDvStdPressureDoc, config3DvStd)
 
 const chartAPIEngine = url => {
   fetch(url)
