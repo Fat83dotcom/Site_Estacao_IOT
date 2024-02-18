@@ -50,3 +50,10 @@ body{
     background-color: var(--gray-color-4);
     border-radius: 3px;
 }
+.fade-sensor{
+    opacity: 0;
+    transition: all 500ms ease-in-out;
+}
+.color-text-2{
+    color: var(--inverted-gray-color-2)!important;
+}
