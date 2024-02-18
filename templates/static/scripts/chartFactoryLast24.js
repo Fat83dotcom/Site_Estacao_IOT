@@ -236,6 +236,13 @@ const updateChartsPressStdDeviation = (date, pressure) => {
   chartPressDvStdLast24.update()
 };
 
+const updateSpinner = () => {
+  const contentA = document.getElementById('fade-sensor')
+  const spinner = document.getElementById('spinner-end')
+  contentA.style.opacity = 1
+  spinner.style.display = 'none'
+}
+
 const chartDvStdTemperatureDoc = document.getElementById('tempDvStdLast24').getContext('2d')
 const chartTempDvStdLast24 = new Chart(chartDvStdTemperatureDoc, config1DvStd)
 
@@ -271,6 +278,12 @@ const chartAPIEngine = url => {
       updateStatsTemperature(temperature)
       updateStatsHumidity(humidity)
       updateStatsPressure(pressure)
-  
+
+      updateSpinner()
+    })
+    .catch((e) =>{
+      const elementSensor = document.getElementById('fade-sensor')
+      elementSensor.style.opacity = 1;
+      elementSensor.innerHTML = `Recarregue a página ou busque outro sensor... ${e}`
     })
 }
