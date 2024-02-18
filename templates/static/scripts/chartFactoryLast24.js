@@ -84,11 +84,35 @@ const fillerStdAverange = (object, arrayTarget, average, stdDeviation) => {
   })
 }
 
-const average = (dataArray) => {
+const max = dataArray => {
+  if (dataArray.length === 0) {
+    return undefined
+  }
+  let max
+  dataArray.forEach((element, index) => {
+    if (index === 0) max = element
+    if (element > max) max = element
+  });
+  return max
+}
+
+const min = dataArray => {
+  if (dataArray.length === 0) {
+    return undefined
+  }
+  let min
+  dataArray.forEach((element, index) => {
+    if (index === 0) min = element
+    if (element < min) min = element
+  });
+  return min
+}
+
+const average = dataArray => {
   return (dataArray.reduce((a, b) => a + b, 0) / dataArray.length)
 }
 
-const stdDeviation = (dataArray) => {
+const stdDeviation = dataArray => {
   return Math.sqrt(
     dataArray.reduce((acc, val) => acc + Math.pow(val - average(dataArray), 2), 0
   ) / dataArray.length)
