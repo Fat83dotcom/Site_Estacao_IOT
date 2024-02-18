@@ -6,9 +6,5 @@
 */
 
 window.addEventListener('load', () => {
-    let contentA = document.getElementById('fade-sensor')
-
-    setTimeout(() => {
-        contentA.style.opacity = 1
-    }, 1500)
+    chartAPIEngine(urlAPI)  
 })
