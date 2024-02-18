@@ -165,6 +165,57 @@ const updateChartsHumiStdDeviation = (date, humidity) => {
   chartHumiDvStdLast24.update()
 };
 
+const updateStatsTemperature = temperature => {
+  const elementTempMax = document.getElementById('temperatureMax')
+  const elementTempMin = document.getElementById('temperatureMin')
+  const elementTempAverage = document.getElementById('temperatureAverage')
+  const elementTempStdDv = document.getElementById('temperatureStdDeviation')
+
+  let temperatureMax = max(temperature).toFixed(2)
+  let temperatureMin = min(temperature).toFixed(2)
+  let temperatureAverage = average(temperature).toFixed(2)
+  let temperatureStdDeviation = stdDeviation(temperature).toFixed(2)
+  
+  elementTempMax.innerHTML = `${temperatureMax} °C`
+  elementTempMin.innerHTML = `${temperatureMin} °C`
+  elementTempAverage.innerHTML = `${temperatureAverage} °C`
+  elementTempStdDv.innerHTML = `${temperatureStdDeviation} °C`
+}
+
+const updateStatsHumidity = humidity => {
+  const elementHumiMax = document.getElementById('humidityMax')
+  const elementHumiMin = document.getElementById('humidityMin')
+  const elementHumiAverage = document.getElementById('humidityAverage')
+  const elementHumiStdDv = document.getElementById('humidityStdDeviation')
+
+  let humidityMax = max(humidity).toFixed(2)
+  let humidityMin = min(humidity).toFixed(2)
+  let humidityAverage = average(humidity).toFixed(2)
+  let humidityStdDeviation = stdDeviation(humidity).toFixed(2)
+
+  elementHumiMax.innerHTML = `${humidityMax} %`
+  elementHumiMin.innerHTML = `${humidityMin} %`
+  elementHumiAverage.innerHTML = `${humidityAverage} %`
+  elementHumiStdDv.innerHTML = `${humidityStdDeviation} %`
+}
+
+const updateStatsPressure = pressure => {
+  const elementPressMax = document.getElementById('pressureMax')
+  const elementPressMin = document.getElementById('pressureMin')
+  const elementPressAverage = document.getElementById('pressureAverage')
+  const elementPressStdDv = document.getElementById('pressureStdDeviation')
+
+  let pressureMax = max(pressure).toFixed(2)
+  let pressureMin = min(pressure).toFixed(2)
+  let pressureAverage = average(pressure).toFixed(2)
+  let pressureStdDeviation = stdDeviation(pressure).toFixed(2)
+
+  elementPressMax.innerHTML = `${pressureMax} hPa`
+  elementPressMin.innerHTML = `${pressureMin} hPa`
+  elementPressAverage.innerHTML = `${pressureAverage} hPa`
+  elementPressStdDv.innerHTML = `${pressureStdDeviation} hPa`
+}
+
 const updateChartsPressStdDeviation = (date, pressure) => {
   let aver = average(pressure)
   let stdD = stdDeviation(pressure)
