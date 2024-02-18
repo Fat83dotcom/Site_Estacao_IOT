@@ -8,27 +8,30 @@ let config1DvStd = {
         display: true,
         scaleLabel: {
           display: true,
-          labelString: 'Últimas 24 horas'
+          labelString: 'Últimas 24 horas',
         }
       },
       y: {
         display: true,
         scaleLabel: {
           display: true,
-          labelString: 'Temperatura'
+          labelString: 'Temperatura',
         },
-        beginAtZero: true,
+        beginAtZero: false,
         ticks: {
-          callback: value => `${value} °C`
+          callback: value => `${value} °C`,
         }
       }
     },
-    plugins: {
-        filler: {
+  },
+  plugins: [
+    {
+      filler: {
         propagate: true,
       }
+
     }
-  },
+  ],
   data: {
     labels: [],
     datasets: [],
@@ -45,27 +48,30 @@ let config2DvStd = {
         display: true,
         scaleLabel: {
           display: true,
-          labelString: 'Últimas 24 horas'
+          labelString: 'Últimas 24 horas',
         }
       },
       y: {
         display: true,
         scaleLabel: {
           display: true,
-          labelString: 'Humidade'
+          labelString: 'Humidade',
         },
-        beginAtZero: true,
+        beginAtZero: false,
         ticks: {
-          callback: value => `${value} %`
+          callback: value => `${value} %`,
         }
       }
     },
-    plugins: {
-        filler: {
+  },
+  plugins: [
+    {
+      filler: {
         propagate: true,
       }
+
     }
-  },
+  ],
   data: {
     labels: [],
     datasets: [],
@@ -82,27 +88,30 @@ let config3DvStd = {
         display: true,
         scaleLabel: {
           display: true,
-          labelString: 'Últimas 24 horas'
+          labelString: 'Últimas 24 horas',
         }
       },
       y: {
         display: true,
         scaleLabel: {
           display: true,
-          labelString: 'Pressão'
+          labelString: 'Pressão',
         },
-        beginAtZero: true,
+        beginAtZero: false,
         ticks: {
-          callback: value => `${value} hPa`
+          callback: value => `${value} hPa`,
         }
       }
     },
-    plugins: {
-        filler: {
+  },
+  plugins: [
+    {
+      filler: {
         propagate: true,
       }
+
     }
-  },
+  ],
   data: {
     labels: [],
     datasets: [],
@@ -119,13 +128,57 @@ const chartDvStdPressureDoc = document.getElementById('pressDvStdLast24').getCon
 const chartPressDvStdLast24 = new Chart(chartDvStdPressureDoc, config3DvStd)
 
 const average = (dataArray) => {
-  return (dataArray.reduce((a, b) => a + b, 0) / dataArray.length).toFixed(2)
+  return (dataArray.reduce((a, b) => a + b, 0) / dataArray.length)
 }
 
 const stdDeviation = (dataArray) => {
   return Math.sqrt(
     dataArray.reduce((acc, val) => acc + Math.pow(val - average(dataArray), 2), 0
-  ) / dataArray.length).toFixed(2)
+  ) / dataArray.length)
+}
+
+const fillerStdAverange = (object, arrayTarget, average, stdDeviation) => {
+  let stdUp = average + stdDeviation
+  let stdDown = average - stdDeviation
+
+  const configStdAverange = [
+    {
+      label: 'Desvio Padrão Superior',
+      data: Array(arrayTarget.length).fill(stdUp.toFixed(2)),
+      borderColor: 'green',
+      borderWidth: 1,
+      fill: {
+        target: '2',
+      },
+      backgroundColor: 'rgb(79, 232, 95, 0.4)',
+      borderDash: [5, 5],
+      pointStyle: 'dash',
+    },
+    {
+      label: 'Média',
+      data: Array(arrayTarget.length).fill(average.toFixed(2)),
+      borderColor: 'red',
+      borderWidth: 1,
+      fill: false,
+      borderDash: [5, 5],
+      pointStyle: 'dash',
+    },
+    {
+      label: 'Desvio Padrão Inferior',
+      data: Array(arrayTarget.length).fill(stdDown.toFixed(2)),
+      borderColor: 'green',
+      borderWidth: 1,
+      fill: {
+        target: '-1',
+      },
+      borderDash: [5, 5],
+      backgroundColor: 'rgb(79, 232, 95, 0.4)',
+      pointStyle: 'dash',
+    }
+  ]
+  configStdAverange.forEach((element) => {
+    object.data.datasets.push(element)
+  })
 }
 
 const updateChartsTempStdDeviation = (date, temperature) => {
@@ -144,51 +197,13 @@ const updateChartsTempStdDeviation = (date, temperature) => {
       backgroundColor: 'rgb(35, 35, 35)',
     }
   )
-  config1DvStd.data.datasets.push(
-    {
-      label: 'Desvio PadrãoSuperior',
-      data: Array(date.length).fill(aver + stdD),
-      borderColor: 'green',
-      borderWidth: 1,
-      fill: {
-        target: '2',
-      },
-      backgroundColor: 'rgb(79, 232, 95, 0.4)',
-      borderDash: [5, 5],
-      pointStyle: 'dash',
-    }
-  )
-  config1DvStd.data.datasets.push(
-    {
-      label: 'Média',
-      data: Array(date.length).fill(aver),
-      borderColor: 'red',
-      borderWidth: 1,
-      fill: false,
-      borderDash: [5, 5],
-      pointStyle: 'dash',
-    }
-  )
-  config1DvStd.data.datasets.push(
-    {
-      label: 'Desvio Padrão Inferior',
-      data: Array(date.length).fill(aver - stdD),
-      borderColor: 'green',
-      borderWidth: 1,
-      fill: {
-        target: '-1',
-      },
-      borderDash: [5, 5],
-      backgroundColor: 'rgb(79, 232, 95, 0.4)',
-      pointStyle: 'dash',
-    }
-  )
+  fillerStdAverange(config1DvStd, date, aver, stdD)
   chartTempDvStdLast24.update()
 };
 
 const updateChartsHumiStdDeviation = (date, humidity) => {
-  var aver = average(humidity)
-  var stdD = stdDeviation(humidity)
+  let aver = average(humidity)
+  let stdD = stdDeviation(humidity)
 
   config2DvStd.data.labels = date
   config2DvStd.data.datasets.push(
@@ -200,53 +215,16 @@ const updateChartsHumiStdDeviation = (date, humidity) => {
       fill: false,
       cubicInterpolationMode: 'monotone',
       backgroundColor: 'rgb(35, 35, 35)',
+      radius: 1,
     }
   )
-  config2DvStd.data.datasets.push(
-    {
-      label: 'Desvio Padrão Superior',
-      data: Array(date.length).fill(stdD + aver),
-      borderColor: 'green',
-      borderWidth: 1,
-      fill: {
-        target: '2',
-      },
-      backgroundColor: 'rgb(79, 232, 95, 0.4)',
-      borderDash: [5, 5],
-      pointStyle: 'dash',
-    }
-  )
-  config2DvStd.data.datasets.push(
-    {
-      label: 'Média',
-      data: Array(date.length).fill(aver),
-      borderColor: 'red',
-      borderWidth: 1,
-      fill: false,
-      borderDash: [5, 5],
-      pointStyle: 'line',
-    }
-  )
-  config2DvStd.data.datasets.push(
-    {
-      label: 'Desvio Padrão Inferior',
-      data: Array(date.length).fill(aver - stdD),
-      borderColor: 'green',
-      borderWidth: 1,
-      fill: {
-        target: '-1',
-      },
-      borderDash: [5, 5],
-      backgroundColor: 'rgb(79, 232, 95, 0.4)',
-      pointStyle: 'dash',
-    }
-  )
+  fillerStdAverange(config2DvStd, date, aver, stdD)
   chartHumiDvStdLast24.update()
 };
 
 const updateChartsPressStdDeviation = (date, pressure) => {
-  var aver = average(pressure)
-  var stdD = stdDeviation(pressure)
+  let aver = average(pressure)
+  let stdD = stdDeviation(pressure)
 
   config3DvStd.data.labels = date
   config3DvStd.data.datasets.push(
@@ -260,45 +238,7 @@ const updateChartsPressStdDeviation = (date, pressure) => {
       backgroundColor: 'rgb(35, 35, 35)',
     }
   )
-  config3DvStd.data.datasets.push(
-    {
-      label: 'Desvio PadrãoSuperior',
-      data: Array(date.length).fill(aver + stdD),
-      borderColor: 'green',
-      borderWidth: 1,
-      fill: {
-        target: '2',
-      },
-      backgroundColor: 'rgb(79, 232, 95, 0.4)',
-      borderDash: [5, 5],
-      pointStyle: 'dash',
-    }
-  )
-  config3DvStd.data.datasets.push(
-    {
-      label: 'Média',
-      data: Array(date.length).fill(aver),
-      borderColor: 'red',
-      borderWidth: 1,
-      fill: false,
-      borderDash: [5, 5],
-      pointStyle: 'dash',
-    }
-  )
-  config3DvStd.data.datasets.push(
-    {
-      label: 'Desvio Padrão Inferior',
-      data: Array(date.length).fill(aver - stdD),
-      borderColor: 'green',
-      borderWidth: 1,
-      fill: {
-        target: '-1',
-      },
-      borderDash: [5, 5],
-      backgroundColor: 'rgb(79, 232, 95, 0.4)',
-      pointStyle: 'dash',
-    }
-  )
+  fillerStdAverange(config3DvStd, date, aver, stdD)
   chartPressDvStdLast24.update()
 };
 
