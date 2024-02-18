@@ -30,6 +30,7 @@
     </div>
     <h2 class="text-center m-3">Gráficos</h2>
     <h2 class="text-center m-3">Registros das últimas 24 hrs.</h2>
+    <div class="spinner-border spinner-border-xl" id="spinner-end"></div>
     <section class="container-fluid text-center fade-sensor" id="fade-sensor">
         <div class="row row-col-2 m-3 d-flex  align-items-stretch">
             <section class="col-md-8 col-12">
@@ -178,11 +179,5 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.3/dist/chart.umd.min.js"></script>
 <script src="{% static 'scripts/chartFactoryLast24.js' %}"></script>
 <script src="{% static 'scripts/fadeSensor.js' %}"></script>
-<script>
-    window.addEventListener("load", (event) => {
-        chartAPIEngine(urlAPI)
-    })
-</script>
-
 
 {% endblock %}
