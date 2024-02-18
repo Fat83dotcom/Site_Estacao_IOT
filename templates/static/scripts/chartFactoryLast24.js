@@ -267,5 +267,10 @@ const chartAPIEngine = url => {
       updateChartsTempStdDeviation(date, temperature)
       updateChartsHumiStdDeviation(date, humidity)
       updateChartsPressStdDeviation(date, pressure)
+
+      updateStatsTemperature(temperature)
+      updateStatsHumidity(humidity)
+      updateStatsPressure(pressure)
+  
     })
 }
