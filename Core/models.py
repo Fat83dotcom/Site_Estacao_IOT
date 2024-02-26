@@ -34,7 +34,7 @@ class Sensor(models.Model):
 
 class DataSensor(models.Model):
     id_data_sensor = models.AutoField(primary_key=True)
-    date_hour = models.DateTimeField()
+    date_hour = models.DateTimeField(unique=True, auto_now_add=True)
     temperature = models.FloatField()
     humidity = models.FloatField()
     pressure = models.FloatField()
