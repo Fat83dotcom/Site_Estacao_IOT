@@ -283,7 +283,9 @@ const chartAPIEngine = url => {
     })
     .catch((e) =>{
       const elementSensor = document.getElementById('fade-sensor')
-      elementSensor.style.opacity = 1;
+      const elementSpin = document.getElementById('spinner-end')
+      elementSensor.style.opacity = 1
+      elementSpin.style.display = 'none'
       elementSensor.innerHTML = `Recarregue a página ou busque outro sensor... ${e}`
     })
 }
