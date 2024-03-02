@@ -30,8 +30,8 @@
     </div>
     <h2 class="text-center m-3">Gráficos</h2>
     <h2 class="text-center m-3">Registros das últimas 24 hrs.</h2>
-    <div class="spinner-border spinner-border-xl" id="spinner-end"></div>
-    <section class="container-fluid text-center fade-sensor" id="fade-sensor">
+    <div class="spinner-border spinner-border-xl" id="spinner-end24"></div>
+    <section class="container-fluid text-center fade-sensor" id="fade-sensor24">
         <div class="row row-col-2 m-3 d-flex  align-items-stretch">
             <section class="col-md-8 col-12">
                 <h3 class="text-center m-3">Média e Desvio Padrão Temperatura</h3>
@@ -46,25 +46,25 @@
                         <span class="toolT" data-bs-placement="bottom" title="Temperatura Máxima">
                             <i class="fa-regular fa-circle-up"></i>
                         </span>
-                        <p id="temperatureMax">-</p>
+                        <p id="temperatureMax24">-</p>
                     </div>
                     <div class="d-flex justify-content-around m-3">
                         <span class="toolT" data-bs-placement="bottom" title="Temperatura Mínima">
                             <i class="fa-regular fa-circle-down"></i>
                         </span>
-                        <p id="temperatureMin">-</p>
+                        <p id="temperatureMin24">-</p>
                     </div>
                     <div class="d-flex justify-content-around m-3">
                         <span class="toolT" data-bs-placement="bottom" title="Temperatura Média">
                             <i class="fa-solid fa-circle-half-stroke"></i>
                         </span>
-                        <p id="temperatureAverage">-</p>
+                        <p id="temperatureAverage24">-</p>
                     </div>
                     <div class="d-flex justify-content-around m-3">
                         <span class="toolT" data-bs-placement="bottom" title="Desvio Padrão">
                             <i class="fa-solid fa-arrow-up-right-dots"></i>
                         </span>
-                        <p id="temperatureStdDeviation">-</p>
+                        <p id="temperatureStdDeviation24">-</p>
                     </div>
                 </div>
             </section>
@@ -83,25 +83,25 @@
                         <span class="toolT" data-bs-placement="bottom" title="Umidade Máxima">
                             <i class="fa-regular fa-circle-up"></i>
                         </span>
-                        <p id="humidityMax">-</p>
+                        <p id="humidityMax24">-</p>
                     </div>
                     <div class="d-flex justify-content-around m-3">
                         <span class="toolT" data-bs-placement="bottom" title="Umidade Mínima">
                             <i class="fa-regular fa-circle-down"></i>
                         </span>
-                        <p id="humidityMin">-</p>
+                        <p id="humidityMin24">-</p>
                     </div>
                     <div class="d-flex justify-content-around m-3">
                         <span class="toolT" data-bs-placement="bottom" title="Umidade Média">
                             <i class="fa-solid fa-circle-half-stroke"></i>
                         </span>
-                        <p id="humidityAverage">-</p>
+                        <p id="humidityAverage24">-</p>
                     </div>
                     <div class="d-flex justify-content-around m-3">
                         <span class="toolT" data-bs-placement="bottom" title="Desvio Padrão">
                             <i class="fa-solid fa-arrow-up-right-dots"></i>
                         </span>
-                        <p id="humidityStdDeviation">-</p>
+                        <p id="humidityStdDeviation24">-</p>
                     </div>
                 </div>
             </section>
@@ -120,25 +120,141 @@
                         <span class="toolT" data-bs-placement="bottom" title="Pressão Máxima">
                             <i class="fa-regular fa-circle-up"></i>
                         </span>
-                        <p id="pressureMax">-</p>
+                        <p id="pressureMax24">-</p>
                     </div>
                     <div class="d-flex justify-content-around m-3">
                         <span class="toolT" data-bs-placement="bottom" title="Pressão Mínima">
                             <i class="fa-regular fa-circle-down"></i>
                         </span>
-                        <p id="pressureMin">-</p>
+                        <p id="pressureMin24">-</p>
                     </div>
                     <div class="d-flex justify-content-around m-3">
                         <span class="toolT" data-bs-placement="bottom" title="Pressão Média">
                             <i class="fa-solid fa-circle-half-stroke"></i>
                         </span>
-                        <p id="pressureAverage">-</p>
+                        <p id="pressureAverage24">-</p>
                     </div>
                     <div class="d-flex justify-content-around m-3">
                         <span class="toolT" data-bs-placement="bottom" title="Desvio Padrão">
                             <i class="fa-solid fa-arrow-up-right-dots"></i>
                         </span>
-                        <p id="pressureStdDeviation">-</p>
+                        <p id="pressureStdDeviation24">-</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <h2 class="text-center mt-5">Registros os últimos 7 dias.</h2>
+    <div class="spinner-border spinner-border-xl" id="spinner-end168"></div>
+    <section class="container-fluid text-center fade-sensor" id="fade-sensor168">
+        <div class="row row-col-2 m-3 d-flex  align-items-stretch">
+            <section class="col-md-8 col-12">
+                <h3 class="text-center m-3">Média e Desvio Padrão Temperatura</h3>
+                <div class="graphs-background p-3">
+                    <canvas id="tempDvStdLast168"></canvas>
+                </div>
+            </section>
+            <section class="col-md-4 col-12">
+                <h3 class="text-center m-3">Temperatura</h3>
+                <div class="graphs-background d-flex flex-column color-text-2">
+                    <div class="d-flex justify-content-around m-3">
+                        <span class="toolT" data-bs-placement="bottom" title="Temperatura Máxima">
+                            <i class="fa-regular fa-circle-up"></i>
+                        </span>
+                        <p id="temperatureMax168">-</p>
+                    </div>
+                    <div class="d-flex justify-content-around m-3">
+                        <span class="toolT" data-bs-placement="bottom" title="Temperatura Mínima">
+                            <i class="fa-regular fa-circle-down"></i>
+                        </span>
+                        <p id="temperatureMin168">-</p>
+                    </div>
+                    <div class="d-flex justify-content-around m-3">
+                        <span class="toolT" data-bs-placement="bottom" title="Temperatura Média">
+                            <i class="fa-solid fa-circle-half-stroke"></i>
+                        </span>
+                        <p id="temperatureAverage168">-</p>
+                    </div>
+                    <div class="d-flex justify-content-around m-3">
+                        <span class="toolT" data-bs-placement="bottom" title="Desvio Padrão">
+                            <i class="fa-solid fa-arrow-up-right-dots"></i>
+                        </span>
+                        <p id="temperatureStdDeviation168">-</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="row m-3 d-flex align-items-stretch">
+            <section class="col-md-8 col-12">
+                <h3 class="text-center m-3">Média e Desvio Padrão Umidade</h3>
+                <div class="graphs-background p-3">
+                    <canvas id="humiDvStdLast168"></canvas>
+                </div>
+            </section>
+            <section class="col-md-4 col-12">
+                <h3 class="text-center m-3">Umidade</h3>
+                <div class="graphs-background d-flex flex-column color-text-2">
+                    <div class="d-flex justify-content-around m-3">
+                        <span class="toolT" data-bs-placement="bottom" title="Umidade Máxima">
+                            <i class="fa-regular fa-circle-up"></i>
+                        </span>
+                        <p id="humidityMax168">-</p>
+                    </div>
+                    <div class="d-flex justify-content-around m-3">
+                        <span class="toolT" data-bs-placement="bottom" title="Umidade Mínima">
+                            <i class="fa-regular fa-circle-down"></i>
+                        </span>
+                        <p id="humidityMin168">-</p>
+                    </div>
+                    <div class="d-flex justify-content-around m-3">
+                        <span class="toolT" data-bs-placement="bottom" title="Umidade Média">
+                            <i class="fa-solid fa-circle-half-stroke"></i>
+                        </span>
+                        <p id="humidityAverage168">-</p>
+                    </div>
+                    <div class="d-flex justify-content-around m-3">
+                        <span class="toolT" data-bs-placement="bottom" title="Desvio Padrão">
+                            <i class="fa-solid fa-arrow-up-right-dots"></i>
+                        </span>
+                        <p id="humidityStdDeviation168">-</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="row m-3 d-flex align-items-stretch">
+            <section class="col-md-8 col-12">
+                <h3 class="text-center m-3">Média e Desvio Padrão Pressão</h3>
+                <div class="graphs-background p-3">
+                    <canvas id="pressDvStdLast168"></canvas>
+                </div>
+            </section>
+            <section class="col-md-4 col-12">
+                <h3 class="text-center m-3">Pressão</h3>
+                <div class="graphs-background d-flex flex-column color-text-2">
+                    <div class="d-flex justify-content-around m-3">
+                        <span class="toolT" data-bs-placement="bottom" title="Pressão Máxima">
+                            <i class="fa-regular fa-circle-up"></i>
+                        </span>
+                        <p id="pressureMax168">-</p>
+                    </div>
+                    <div class="d-flex justify-content-around m-3">
+                        <span class="toolT" data-bs-placement="bottom" title="Pressão Mínima">
+                            <i class="fa-regular fa-circle-down"></i>
+                        </span>
+                        <p id="pressureMin168">-</p>
+                    </div>
+                    <div class="d-flex justify-content-around m-3">
+                        <span class="toolT" data-bs-placement="bottom" title="Pressão Média">
+                            <i class="fa-solid fa-circle-half-stroke"></i>
+                        </span>
+                        <p id="pressureAverage168">-</p>
+                    </div>
+                    <div class="d-flex justify-content-around m-3">
+                        <span class="toolT" data-bs-placement="bottom" title="Desvio Padrão">
+                            <i class="fa-solid fa-arrow-up-right-dots"></i>
+                        </span>
+                        <p id="pressureStdDeviation168">-</p>
                     </div>
                 </div>
             </section>
@@ -176,9 +292,11 @@
     integrity="sha512-GWzVrcGlo0TxTRvz9ttioyYJ+Wwk9Ck0G81D+eO63BaqHaJ3YZX9wuqjwgfcV/MrB2PhaVX9DkYVhbFpStnqpQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer">
 </script>
-<script>let urlAPI = 'http://127.0.0.1:8000/api/data_graph_24/{{idSensor}}'</script>
+<script>let urlAPI24 = 'http://127.0.0.1:8000/api/data_graph_24/{{idSensor}}'</script>
+<script>let urlAPI168 = 'http://127.0.0.1:8000/api/data_graph_168/{{idSensor}}'</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.3/dist/chart.umd.min.js"></script>
 <script src="{% static 'scripts/chartFactoryLast24.js' %}"></script>
-<script src="{% static 'scripts/fadeSensor.js' %}"></script>
+<script src="{% static 'scripts/chartFactoryLast168.js' %}"></script>
+<script src="{% static 'scripts/loadGraphEngines.js' %}"></script>
 
 {% endblock %}
