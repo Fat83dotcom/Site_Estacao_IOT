@@ -40,7 +40,7 @@ class Graph24Hrs(APIView):
         dataSensor = get_list_or_404(
             QueryData.query(
                 sensor=kwargs.get('sensor'), model=DataSensor, time=24
-            )[:1440]
+            )
         )
         serializer = GraphSerializer(
             instance=dataSensor,
