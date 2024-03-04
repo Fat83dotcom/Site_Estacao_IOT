@@ -35,7 +35,7 @@ const graphConfigFactory = (ticks) => {
         filler: {
           propagate: true,
         }
-  
+
       }
     ],
     data: {
@@ -56,7 +56,7 @@ const chartTempDvStdLast24 = new Chart(chartDvStdTemperatureDoc, config1DvStd)
 const chartHumiDvStdLast24 = new Chart(chartDvStdHumidityDoc, config2DvStd)
 const chartPressDvStdLast24 = new Chart(chartDvStdPressureDoc, config3DvStd)
 
-const engineAPI24Hrs = (url) => {
+async function engineAPI24Hrs(url) {
   const fillerStdAverange = (object, arrayTarget, average, stdDeviation) => {
     let stdUp = average + stdDeviation
     let stdDown = average - stdDeviation
@@ -132,7 +132,7 @@ const engineAPI24Hrs = (url) => {
   const stdDeviation = dataArray => {
     return Math.sqrt(
       dataArray.reduce((acc, val) => acc + Math.pow(val - average(dataArray), 2), 0
-    ) / dataArray.length)
+      ) / dataArray.length)
   };
 
   const updateChartsTempStdDeviation = (date, temperature) => {
@@ -215,7 +215,7 @@ const engineAPI24Hrs = (url) => {
     let temperatureMin = min(temperature).toFixed(2)
     let temperatureAverage = average(temperature).toFixed(2)
     let temperatureStdDeviation = stdDeviation(temperature).toFixed(2)
-    
+
     elementTempMax.innerHTML = `${temperatureMax} °C`
     elementTempMin.innerHTML = `${temperatureMin} °C`
     elementTempAverage.innerHTML = `${temperatureAverage} °C`
@@ -261,7 +261,7 @@ const engineAPI24Hrs = (url) => {
     const spinner = document.getElementById('spinner-end24')
     contentA.style.display = 'block'
     spinner.style.display = 'none'
-    setTimeout(()=>{
+    setTimeout(() => {
       contentA.style.opacity = 1
     }, 30)
   };
@@ -295,12 +295,13 @@ const engineAPI24Hrs = (url) => {
 
         updateSpinner()
       })
-      .catch((e) =>{
+      .catch((e) => {
         const elementSensor = document.getElementById('fade-sensor24')
         const elementSpin = document.getElementById('spinner-end24')
         elementSensor.style.opacity = 1
         elementSpin.style.display = 'none'
-        elementSensor.innerHTML = `Recarregue a página ou busque outro sensor... ${e}`
+        elementSensor.innerHTML = 'Recarregue a página ou busque outro sensor...'
+        console.log(e)
       })
   };
   chartAPIEngine(url)
