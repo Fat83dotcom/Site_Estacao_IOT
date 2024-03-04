@@ -3,16 +3,15 @@
     todos os direitos reservados 2024 © BrainStorm Tecnologia
 */
 
+async function execStdDvAPIGraphs() {
+    await engineAPI24Hrs(urlAPI24)
+    await engineAPI168Hrs(urlAPI168)
+}
+
 window.addEventListener('load', () => {
-    engineAPI24Hrs(urlAPI24)  
-})
-window.addEventListener('load', () => {
-    engineAPI168Hrs(urlAPI168)  
+    execStdDvAPIGraphs()
 })
 
 setInterval(() => {
-    engineAPI24Hrs(urlAPI24)
-}, 60000)
-setInterval(() => {
-    engineAPI168Hrs(urlAPI168)
+    execStdDvAPIGraphs()
 }, 60000)
