@@ -80,3 +80,16 @@ class Graph720Hrs(APIView):
             many=True
         )
         return Response(serializer.data)
+
+
+class ScatterGraph_1Hr(APIView):
+    def get(self, request, *args, **kwargs):
+        pass
+
+
+class Stats24Hrs(APIView):
+    pass
+
+
+class Stats168Hrs(APIView):
+    pass
