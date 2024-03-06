@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from django.shortcuts import get_list_or_404
 from Core.Utils.classesUtils import TimeUtils
 import re
+import numpy as np
 
 
 class GraphSerializer(serializers.ModelSerializer):
