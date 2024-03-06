@@ -3,51 +3,9 @@
     todos os direitos reservados 2024 © BrainStorm Tecnologia
 */
 
-const graphConfigFactory168 = (ticks) => {
-  return {
-    type: 'line',
-    options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      scales: {
-        x: {
-          display: true,
-          scaleLabel: {
-            display: true,
-            labelString: '',
-          }
-        },
-        y: {
-          display: true,
-          scaleLabel: {
-            display: true,
-            labelString: '',
-          },
-          beginAtZero: false,
-          ticks: {
-            callback: value => `${value} ${ticks}`,
-          }
-        }
-      },
-    },
-    plugins: [
-      {
-        filler: {
-          propagate: true,
-        }
-
-      }
-    ],
-    data: {
-      labels: [],
-      datasets: [],
-    }
-  };
-};
-
-let config1DvStd168 = graphConfigFactory168('°C')
-let config2DvStd168 = graphConfigFactory168('%')
-let config3DvStd168 = graphConfigFactory168('hPa')
+let config1DvStd168 = graphConfigFactory('°C')
+let config2DvStd168 = graphConfigFactory('%')
+let config3DvStd168 = graphConfigFactory('hPa')
 
 const chartDvStdTemperatureDoc168 = document.getElementById('tempDvStdLast168').getContext('2d')
 const chartDvStdHumidityDoc168 = document.getElementById('humiDvStdLast168').getContext('2d')
@@ -58,13 +16,13 @@ const chartPressDvStdLast168 = new Chart(chartDvStdPressureDoc168, config3DvStd1
 
 async function engineAPI168Hrs(url) {
   const fillerStdAverange = (object, arrayTarget, average, stdDeviation) => {
-    let stdUp = average + stdDeviation
-    let stdDown = average - stdDeviation
+    let stdUp = parseFloat(average) + parseFloat(stdDeviation)
+    let stdDown = parseFloat(average) - parseFloat(stdDeviation)
 
     const configStdAverange = [
       {
         label: 'Desvio Padrão Superior',
-        data: Array(arrayTarget.length).fill(stdUp.toFixed(2)),
+        data: Array(arrayTarget.length).fill(stdUp),
         borderColor: 'green',
         borderWidth: 1,
         fill: {
@@ -76,7 +34,7 @@ async function engineAPI168Hrs(url) {
       },
       {
         label: 'Média',
-        data: Array(arrayTarget.length).fill(average.toFixed(2)),
+        data: Array(arrayTarget.length).fill(average),
         borderColor: 'red',
         borderWidth: 1,
         fill: false,
@@ -85,7 +43,7 @@ async function engineAPI168Hrs(url) {
       },
       {
         label: 'Desvio Padrão Inferior',
-        data: Array(arrayTarget.length).fill(stdDown.toFixed(2)),
+        data: Array(arrayTarget.length).fill(stdDown),
         borderColor: 'green',
         borderWidth: 1,
         fill: {
@@ -101,44 +59,8 @@ async function engineAPI168Hrs(url) {
     })
   };
 
-  const max = dataArray => {
-    if (dataArray.length === 0) {
-      return undefined
-    }
-    let max
-    dataArray.forEach((element, index) => {
-      if (index === 0) max = element
-      if (element > max) max = element
-    });
-    return max
-  };
-
-  const min = dataArray => {
-    if (dataArray.length === 0) {
-      return undefined
-    }
-    let min
-    dataArray.forEach((element, index) => {
-      if (index === 0) min = element
-      if (element < min) min = element
-    });
-    return min
-  };
-
-  const average = dataArray => {
-    return (dataArray.reduce((a, b) => a + b, 0) / dataArray.length)
-  };
-
-  const stdDeviation = dataArray => {
-    return Math.sqrt(
-      dataArray.reduce((acc, val) => acc + Math.pow(val - average(dataArray), 2), 0
-      ) / dataArray.length)
-  };
-
-  const updateChartsTempStdDeviation = (date, temperature) => {
-    let aver = average(temperature)
-    let stdD = stdDeviation(temperature)
-
+  
+  const updateChartsTempStdDeviation = (date, temperature, aver, stdD) => {
     if (config1DvStd168.data.datasets.length > 0) {
       config1DvStd168.data.datasets.length = 0
     }
@@ -158,10 +80,7 @@ async function engineAPI168Hrs(url) {
     chartTempDvStdLast168.update()
   };
 
-  const updateChartsHumiStdDeviation = (date, humidity) => {
-    let aver = average(humidity)
-    let stdD = stdDeviation(humidity)
-
+  const updateChartsHumiStdDeviation = (date, humidity, aver, stdD) => {
     if (config2DvStd168.data.datasets.length > 0) {
       config2DvStd168.data.datasets.length = 0
     }
@@ -182,10 +101,7 @@ async function engineAPI168Hrs(url) {
     chartHumiDvStdLast168.update()
   };
 
-  const updateChartsPressStdDeviation = (date, pressure) => {
-    let aver = average(pressure)
-    let stdD = stdDeviation(pressure)
-
+  const updateChartsPressStdDeviation = (date, pressure, aver, stdD) => {
     if (config3DvStd168.data.datasets.length > 0) {
       config3DvStd168.data.datasets.length = 0
     }
@@ -205,55 +121,40 @@ async function engineAPI168Hrs(url) {
     chartPressDvStdLast168.update()
   };
 
-  const updateStatsTemperature = temperature => {
+  const updateStatsTemperature = (aver, stdD, max, min) => {
     const elementTempMax = document.getElementById('temperatureMax168')
     const elementTempMin = document.getElementById('temperatureMin168')
     const elementTempAverage = document.getElementById('temperatureAverage168')
     const elementTempStdDv = document.getElementById('temperatureStdDeviation168')
 
-    let temperatureMax = max(temperature).toFixed(2)
-    let temperatureMin = min(temperature).toFixed(2)
-    let temperatureAverage = average(temperature).toFixed(2)
-    let temperatureStdDeviation = stdDeviation(temperature).toFixed(2)
-
-    elementTempMax.innerHTML = `${temperatureMax} °C`
-    elementTempMin.innerHTML = `${temperatureMin} °C`
-    elementTempAverage.innerHTML = `${temperatureAverage} °C`
-    elementTempStdDv.innerHTML = `${temperatureStdDeviation} °C`
+    elementTempAverage.innerHTML = `${aver} °C`
+    elementTempStdDv.innerHTML = `${stdD} °C`
+    elementTempMax.innerHTML = `${max} °C`
+    elementTempMin.innerHTML = `${min} °C`
   };
 
-  const updateStatsHumidity = humidity => {
+  const updateStatsHumidity = (aver, stdD, max, min) => {
     const elementHumiMax = document.getElementById('humidityMax168')
     const elementHumiMin = document.getElementById('humidityMin168')
     const elementHumiAverage = document.getElementById('humidityAverage168')
     const elementHumiStdDv = document.getElementById('humidityStdDeviation168')
-
-    let humidityMax = max(humidity).toFixed(2)
-    let humidityMin = min(humidity).toFixed(2)
-    let humidityAverage = average(humidity).toFixed(2)
-    let humidityStdDeviation = stdDeviation(humidity).toFixed(2)
-
-    elementHumiMax.innerHTML = `${humidityMax} %`
-    elementHumiMin.innerHTML = `${humidityMin} %`
-    elementHumiAverage.innerHTML = `${humidityAverage} %`
-    elementHumiStdDv.innerHTML = `${humidityStdDeviation} %`
+    
+    elementHumiAverage.innerHTML = `${aver} %`
+    elementHumiStdDv.innerHTML = `${stdD} %`
+    elementHumiMax.innerHTML = `${max} %`
+    elementHumiMin.innerHTML = `${min} %`
   };
 
-  const updateStatsPressure = pressure => {
+  const updateStatsPressure = (aver, stdD, max, min) => {
     const elementPressMax = document.getElementById('pressureMax168')
     const elementPressMin = document.getElementById('pressureMin168')
     const elementPressAverage = document.getElementById('pressureAverage168')
     const elementPressStdDv = document.getElementById('pressureStdDeviation168')
-
-    let pressureMax = max(pressure).toFixed(2)
-    let pressureMin = min(pressure).toFixed(2)
-    let pressureAverage = average(pressure).toFixed(2)
-    let pressureStdDeviation = stdDeviation(pressure).toFixed(2)
-
-    elementPressMax.innerHTML = `${pressureMax} hPa`
-    elementPressMin.innerHTML = `${pressureMin} hPa`
-    elementPressAverage.innerHTML = `${pressureAverage} hPa`
-    elementPressStdDv.innerHTML = `${pressureStdDeviation} hPa`
+    
+    elementPressAverage.innerHTML = `${aver} hPa`
+    elementPressStdDv.innerHTML = `${stdD} hPa`
+    elementPressMax.innerHTML = `${max} hPa`
+    elementPressMin.innerHTML = `${min} hPa`
   };
 
   const updateSpinner = () => {
@@ -285,13 +186,43 @@ async function engineAPI168Hrs(url) {
           humidity.push(element.humidity)
           pressure.push(element.pressure)
         })
-        updateChartsTempStdDeviation(date, temperature)
-        updateChartsHumiStdDeviation(date, humidity)
-        updateChartsPressStdDeviation(date, pressure)
 
-        updateStatsTemperature(temperature)
-        updateStatsHumidity(humidity)
-        updateStatsPressure(pressure)
+        let averageTemp = average(temperature).toFixed(2)
+        let averageHumi = average(humidity).toFixed(2)
+        let averagePress = average(pressure).toFixed(2)
+
+        let stdDeviationTemp = stdDeviation(temperature, averageTemp).toFixed(2)
+        let stdDeviationHumi = stdDeviation(humidity, averageHumi).toFixed(2)
+        let stdDeviationPress = stdDeviation(pressure, averagePress).toFixed(2)
+
+        let maxTemp = max(temperature)
+        let minTemp = min(temperature)
+
+        let maxHumi = max(humidity)
+        let minHumi = min(humidity)
+        
+        let maxPress = max(pressure)
+        let minPress = min(pressure)
+
+        updateChartsTempStdDeviation(
+          date, temperature, averageTemp, stdDeviationTemp
+        )
+        updateChartsHumiStdDeviation(
+          date, humidity, averageHumi, stdDeviationHumi
+        )
+        updateChartsPressStdDeviation(
+          date, pressure, averagePress, stdDeviationPress
+        )
+
+        updateStatsTemperature(
+          averageTemp, stdDeviationTemp, maxTemp, minTemp
+        )
+        updateStatsHumidity(
+          averageHumi, stdDeviationHumi, maxHumi, minHumi
+        )
+        updateStatsPressure(
+          averagePress, stdDeviationPress, maxPress, minPress
+        )
 
         updateSpinner()
       })
