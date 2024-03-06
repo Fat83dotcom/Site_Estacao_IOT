@@ -20,7 +20,11 @@ class GraphSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         reg = r"(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})-\d{2}:\d{2}"
         sub = r"\3/\2/\1 \4:\5"
+
         data['date_hour'] = re.sub(reg, sub, data['date_hour'])
+        data['temperature'] = round(data['temperature'], 2)
+        data['humidity'] = round(data['humidity'], 2)
+        data['pressure'] = round(data['pressure'], 2)
         return data
 
 
