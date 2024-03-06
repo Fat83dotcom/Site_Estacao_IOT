@@ -2,6 +2,11 @@
 {% load static %}
 {% block content %}
 <section class="container-fluid text-center position-static">
+    <div class="m-3 text-center position-fixed top-50 start-0 translate-middle-y d-grid gap-1 col-1 mx-auto">
+        <button type="button" onclick="refresh()" class="btn btn-dark"
+        style="--bs-btn-padding-y: .15rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .50rem;"
+        >Atualizar<br>Gráficos</button>
+    </div>
     <h2 class="text-center m-3">Sensor</h2>
     <div class="row row-col-2">
         <section
