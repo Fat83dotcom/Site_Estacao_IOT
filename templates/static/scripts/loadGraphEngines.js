@@ -12,6 +12,7 @@ window.addEventListener('load', () => {
     execStdDvAPIGraphs()
 })
 
-setInterval(() => {
+const refresh = () =>{
     execStdDvAPIGraphs()
-}, 60000)
+}
+
