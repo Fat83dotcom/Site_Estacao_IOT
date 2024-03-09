@@ -238,5 +238,6 @@ async function engineAPI24Hrs(url) {
         console.log(e)
       })
   };
+  // new Promise()
   chartAPIEngine(url)
 };
