@@ -3,16 +3,16 @@
     todos os direitos reservados 2024 © BrainStorm Tecnologia
 */
 
-let config1DvStd168 = graphConfigFactory('°C')
-let config2DvStd168 = graphConfigFactory('%')
-let config3DvStd168 = graphConfigFactory('hPa')
+let configTempDvStd168 = graphConfigFactory('°C')
+let configHUmiDvStd168 = graphConfigFactory('%')
+let configPressDvStd168 = graphConfigFactory('hPa')
 
 const chartDvStdTemperatureDoc168 = document.getElementById('tempDvStdLast168').getContext('2d')
 const chartDvStdHumidityDoc168 = document.getElementById('humiDvStdLast168').getContext('2d')
 const chartDvStdPressureDoc168 = document.getElementById('pressDvStdLast168').getContext('2d')
-const chartTempDvStdLast168 = new Chart(chartDvStdTemperatureDoc168, config1DvStd168)
-const chartHumiDvStdLast168 = new Chart(chartDvStdHumidityDoc168, config2DvStd168)
-const chartPressDvStdLast168 = new Chart(chartDvStdPressureDoc168, config3DvStd168)
+const chartTempDvStdLast168 = new Chart(chartDvStdTemperatureDoc168, configTempDvStd168)
+const chartHumiDvStdLast168 = new Chart(chartDvStdHumidityDoc168, configHUmiDvStd168)
+const chartPressDvStdLast168 = new Chart(chartDvStdPressureDoc168, configPressDvStd168)
 
 async function engineAPI168Hrs(url) {
   const fillerStdAverange = (object, arrayTarget, average, stdDeviation) => {
@@ -59,35 +59,14 @@ async function engineAPI168Hrs(url) {
     })
   };
 
-  
-  const updateChartsTempStdDeviation = (date, temperature, aver, stdD) => {
-    if (config1DvStd168.data.datasets.length > 0) {
-      config1DvStd168.data.datasets.length = 0
+  const updateChartStdDeviation = (config, chart, _label, date, humidity, aver, stdD) => {
+    if (config.data.datasets.length > 0) {
+      config.data.datasets.length = 0
     }
-    config1DvStd168.data.labels = date
-    config1DvStd168.data.datasets.push(
+    config.data.labels = date
+    config.data.datasets.push(
       {
-        label: 'Temperatura',
-        data: temperature,
-        borderWidth: 1,
-        pointRadius: 1.5,
-        fill: false,
-        cubicInterpolationMode: 'monotone',
-        backgroundColor: 'rgb(35, 35, 35)',
-      }
-    )
-    fillerStdAverange(config1DvStd168, date, aver, stdD)
-    chartTempDvStdLast168.update()
-  };
-
-  const updateChartsHumiStdDeviation = (date, humidity, aver, stdD) => {
-    if (config2DvStd168.data.datasets.length > 0) {
-      config2DvStd168.data.datasets.length = 0
-    }
-    config2DvStd168.data.labels = date
-    config2DvStd168.data.datasets.push(
-      {
-        label: 'Humidade',
+        label: _label,
         data: humidity,
         borderWidth: 0.5,
         pointRadius: 1.5,
@@ -97,28 +76,8 @@ async function engineAPI168Hrs(url) {
         radius: 1,
       }
     )
-    fillerStdAverange(config2DvStd168, date, aver, stdD)
-    chartHumiDvStdLast168.update()
-  };
-
-  const updateChartsPressStdDeviation = (date, pressure, aver, stdD) => {
-    if (config3DvStd168.data.datasets.length > 0) {
-      config3DvStd168.data.datasets.length = 0
-    }
-    config3DvStd168.data.labels = date
-    config3DvStd168.data.datasets.push(
-      {
-        label: 'Pressão',
-        data: pressure,
-        borderWidth: 0.5,
-        pointRadius: 1.5,
-        fill: false,
-        cubicInterpolationMode: 'monotone',
-        backgroundColor: 'rgb(35, 35, 35)',
-      }
-    )
-    fillerStdAverange(config3DvStd168, date, aver, stdD)
-    chartPressDvStdLast168.update()
+    fillerStdAverange(config, date, aver, stdD)
+    chart.update()
   };
 
   const updateStatsTemperature = (aver, stdD, max, min) => {
@@ -204,14 +163,32 @@ async function engineAPI168Hrs(url) {
         let maxPress = max(pressure)
         let minPress = min(pressure)
 
-        updateChartsTempStdDeviation(
-          date, temperature, averageTemp, stdDeviationTemp
+        updateChartStdDeviation(
+          configTempDvStd168,
+          chartTempDvStdLast168,
+          'Temperatura',
+          date,
+          temperature,
+          averageTemp,
+          stdDeviationTemp
         )
-        updateChartsHumiStdDeviation(
-          date, humidity, averageHumi, stdDeviationHumi
+        updateChartStdDeviation(
+          configHUmiDvStd168,
+          chartHumiDvStdLast168,
+          'Umidade',
+          date,
+          humidity,
+          averageHumi,
+          stdDeviationHumi
         )
-        updateChartsPressStdDeviation(
-          date, pressure, averagePress, stdDeviationPress
+        updateChartStdDeviation(
+          configPressDvStd168,
+          chartPressDvStdLast168,
+          'Pressão',
+          date,
+          pressure,
+          averagePress,
+          stdDeviationPress
         )
 
         updateStatsTemperature(
