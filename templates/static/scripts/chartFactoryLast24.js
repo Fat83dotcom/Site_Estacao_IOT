@@ -5,125 +5,18 @@
 
 
 
-let config1DvStd = graphConfigFactory('°C')
-let config2DvStd = graphConfigFactory('%')
-let config3DvStd = graphConfigFactory('hPa')
+let configTempDvStd24 = graphConfigFactory('°C')
+let configHumiDvStd24 = graphConfigFactory('%')
+let configPressDvStd24 = graphConfigFactory('hPa')
 
 const chartDvStdTemperatureDoc = document.getElementById('tempDvStdLast24').getContext('2d')
 const chartDvStdHumidityDoc = document.getElementById('humiDvStdLast24').getContext('2d')
 const chartDvStdPressureDoc = document.getElementById('pressDvStdLast24').getContext('2d')
-const chartTempDvStdLast24 = new Chart(chartDvStdTemperatureDoc, config1DvStd)
-const chartHumiDvStdLast24 = new Chart(chartDvStdHumidityDoc, config2DvStd)
-const chartPressDvStdLast24 = new Chart(chartDvStdPressureDoc, config3DvStd)
+const chartTempDvStdLast24 = new Chart(chartDvStdTemperatureDoc, configTempDvStd24)
+const chartHumiDvStdLast24 = new Chart(chartDvStdHumidityDoc, configHumiDvStd24)
+const chartPressDvStdLast24 = new Chart(chartDvStdPressureDoc, configPressDvStd24)
 
-async function engineAPI24Hrs(url) {
-  const fillerStdAverange = (object, arrayTarget, average, stdDeviation) => {
-    const stdUp = parseFloat(average) + parseFloat(stdDeviation)
-    const stdDown = parseFloat(average) - parseFloat(stdDeviation)
-
-    console.log(stdUp);
-    console.log(stdDown);
-
-    const configStdAverange = [
-      {
-        label: 'Desvio Padrão Superior',
-        data: Array(arrayTarget.length).fill(stdUp.toFixed(2)),
-        borderColor: 'green',
-        borderWidth: 1,
-        fill: {
-          target: '2',
-        },
-        backgroundColor: 'rgb(79, 232, 95, 0.4)',
-        borderDash: [5, 5],
-        pointStyle: 'dash',
-      },
-      {
-        label: 'Média',
-        data: Array(arrayTarget.length).fill(average),
-        borderColor: 'red',
-        borderWidth: 1,
-        fill: false,
-        borderDash: [5, 5],
-        pointStyle: 'dash',
-      },
-      {
-        label: 'Desvio Padrão Inferior',
-        data: Array(arrayTarget.length).fill(stdDown.toFixed(2)),
-        borderColor: 'green',
-        borderWidth: 1,
-        fill: {
-          target: '-1',
-        },
-        borderDash: [5, 5],
-        backgroundColor: 'rgb(79, 232, 95, 0.4)',
-        pointStyle: 'dash',
-      }
-    ]
-    configStdAverange.forEach((element) => {
-      object.data.datasets.push(element)
-    })
-  };
-  const updateChartsTempStdDeviation = (date, temperature, aver, stdD) => {
-    if (config1DvStd.data.datasets.length > 0) {
-      config1DvStd.data.datasets.length = 0
-    }
-    config1DvStd.data.labels = date
-    config1DvStd.data.datasets.push(
-      {
-        label: 'Temperatura',
-        data: temperature,
-        borderWidth: 1,
-        pointRadius: 1.5,
-        fill: false,
-        cubicInterpolationMode: 'monotone',
-        backgroundColor: 'rgb(35, 35, 35)',
-      }
-    )
-    fillerStdAverange(config1DvStd, date, aver, stdD)
-    chartTempDvStdLast24.update()
-  };
-
-  const updateChartsHumiStdDeviation = (date, humidity, aver, stdD) => {
-    if (config2DvStd.data.datasets.length > 0) {
-      config2DvStd.data.datasets.length = 0
-    }
-    config2DvStd.data.labels = date
-    config2DvStd.data.datasets.push(
-      {
-        label: 'Humidade',
-        data: humidity,
-        borderWidth: 0.5,
-        pointRadius: 1.5,
-        fill: false,
-        cubicInterpolationMode: 'monotone',
-        backgroundColor: 'rgb(35, 35, 35)',
-        radius: 1,
-      }
-    )
-    fillerStdAverange(config2DvStd, date, aver, stdD)
-    chartHumiDvStdLast24.update()
-  };
-
-  const updateChartsPressStdDeviation = (date, pressure, aver, stdD) => {
-    if (config3DvStd.data.datasets.length > 0) {
-      config3DvStd.data.datasets.length = 0
-    }
-    config3DvStd.data.labels = date
-    config3DvStd.data.datasets.push(
-      {
-        label: 'Pressão',
-        data: pressure,
-        borderWidth: 0.5,
-        pointRadius: 1.5,
-        fill: false,
-        cubicInterpolationMode: 'monotone',
-        backgroundColor: 'rgb(35, 35, 35)',
-      }
-    )
-    fillerStdAverange(config3DvStd, date, aver, stdD)
-    chartPressDvStdLast24.update()
-  };
-
+function engineAPI24Hrs(urlGraph, urlStats) {
   const updateStatsTemperature = (aver, stdD, max, min) => {
     const elementTempMax = document.getElementById('temperatureMax24')
     const elementTempMin = document.getElementById('temperatureMin24')
@@ -170,8 +63,27 @@ async function engineAPI24Hrs(url) {
     }, 30)
   };
 
-  const chartAPIEngine = url => {
-    fetch(url)
+  const chartAPIEngine = (urlGraphs, urlStats) => {
+    const stats = {
+      temperature: {},
+      humidity: {},
+      pressure: {}
+    }
+    fetch(urlStats)
+      .then(responseStats => {
+        if (responseStats.status !== 200) throw new Error(
+          'Dados não encontrados: ' + responseStats.statusText
+        )
+        return responseStats.json()
+      })
+      .then(dataStats => {
+        stats.temperature = dataStats[0]
+        stats.humidity = dataStats[1]
+        stats.pressure = dataStats[2]
+        console.log(stats)
+        return fetch(urlGraphs)
+      })
+
       .then(response => {
         if (response.status !== 200) throw new Error(
           'Dados não encontrados: ' + response.statusText
@@ -190,41 +102,51 @@ async function engineAPI24Hrs(url) {
           pressure.push(element.pressure)
         })
 
-        let averageTemp = average(temperature).toFixed(2)
-        let averageHumi = average(humidity).toFixed(2)
-        let averagePress = average(pressure).toFixed(2)
-
-        let stdDeviationTemp = stdDeviation(temperature, averageTemp).toFixed(2)
-        let stdDeviationHumi = stdDeviation(humidity, averageHumi).toFixed(2)
-        let stdDeviationPress = stdDeviation(pressure, averagePress).toFixed(2)
-
-        let maxTemp = max(temperature)
-        let minTemp = min(temperature)
-
-        let maxHumi = max(humidity)
-        let minHumi = min(humidity)
-        
-        let maxPress = max(pressure)
-        let minPress = min(pressure)
-
-        updateChartsTempStdDeviation(
-          date, temperature, averageTemp, stdDeviationTemp
+        updateChartStdDeviation(
+          configTempDvStd24,
+          chartTempDvStdLast24,
+          'Temperatura',
+          date,
+          temperature,
+          stats.temperature.average,
+          stats.temperature.stdDV
         )
-        updateChartsHumiStdDeviation(
-          date, humidity, averageHumi, stdDeviationHumi
+        updateChartStdDeviation(
+          configHumiDvStd24,
+          chartHumiDvStdLast24,
+          'Umidade',
+          date,
+          humidity,
+          stats.humidity.average,
+          stats.humidity.stdDV
         )
-        updateChartsPressStdDeviation(
-          date, pressure, averagePress, stdDeviationPress
+        updateChartStdDeviation(
+          configPressDvStd24,
+          chartPressDvStdLast24,
+          'Pressão',
+          date,
+          pressure,
+          stats.pressure.average,
+          stats.pressure.stdDV
         )
 
         updateStatsTemperature(
-          averageTemp, stdDeviationTemp, maxTemp, minTemp
+          stats.temperature.average,
+          stats.temperature.stdDV,
+          stats.temperature._max,
+          stats.temperature._min
         )
         updateStatsHumidity(
-          averageHumi,stdDeviationHumi, maxHumi, minHumi
+          stats.humidity.average,
+          stats.humidity.stdDV,
+          stats.humidity._max,
+          stats.humidity._min
         )
         updateStatsPressure(
-          averagePress, stdDeviationPress, maxPress, minPress
+          stats.pressure.average,
+          stats.pressure.stdDV,
+          stats.pressure._max,
+          stats.pressure._min
         )
 
         updateSpinner()
@@ -238,6 +160,6 @@ async function engineAPI24Hrs(url) {
         console.log(e)
       })
   };
-  // new Promise()
-  chartAPIEngine(url)
+
+  chartAPIEngine(urlGraph, urlStats)
 };
