@@ -98,7 +98,28 @@ class Stats:
         self.stdDV = stdDV
 
 
-class ExtractData:
+class StatsSerializer(serializers.Serializer):
+    _max = serializers.FloatField()
+    _min = serializers.FloatField()
+    average = serializers.FloatField()
+    stdDV = serializers.FloatField()
+
+
+class StatsFactoryInterface(ABC):
+    @classmethod
+    @abstractmethod
+    def createStats(self) -> Stats: pass
+
+
+class ConcreteStats(StatsFactoryInterface):
+    @classmethod
+    def createStats(
+        self, _max: float, _min: float, average: float, stdDV: float
+    ):
+        return Stats(_max, _min, average, stdDV)
+
+
+class ExtractDataArrays:
     def __init__(self, querySet) -> None:
         self.__temperature = []
         self.__humidity = []
@@ -121,7 +142,7 @@ class ExtractData:
 class Max:
     @classmethod
     def getMax(self, array):
-        return round(np.max(array))
+        return round(np.max(array), 2)
 
 
 class Min:
@@ -142,105 +163,69 @@ class StdDeviation:
         return round(np.std(array), 2)
 
 
-class QueryData:
-    @classmethod
-    def contextQuery(self, sensor, model, time: int):
-        return model.objects.filter(
-            Q(id_sensor=sensor) & Q(
-                date_hour__range=(
-                    TimeUtils.timeLast(time), TimeUtils.timeNow()
-                )
+class GenericStatsInterface(ABC):
+    @abstractmethod
+    def statsGenericFactory(self, sensor, time) -> list[ConcreteStats]: pass
+
+
+class GenericStats(GenericStatsInterface):
+    def statsGenericFactory(
+        self, querySet
+    ) -> list[ConcreteStats]:
+        extract = ExtractDataArrays(querySet)
+
+        return [
+            ConcreteStats.createStats(
+                Max.getMax(array),
+                Min.getMin(array),
+                Average.getAverage(array),
+                StdDeviation.getStdDeviaton(array)
             )
-        )
+            for array in [
+                extract.getArrayTemp(),
+                extract.getArrayHumi(),
+                extract.getArrayPress()
+            ]
+        ]
 
 
-class Graph24Hrs(APIView):
-    def get(self, request, *args, **kwargs):
-        dataSensor = get_list_or_404(
-            QueryData.contextQuery(
-                sensor=kwargs.get('sensor'), model=DataSensor, time=27
-            )[:1440]
-        )
-        serializer = GraphSerializer(
-            instance=dataSensor,
-            many=True
-        )
-        return Response(serializer.data)
-
-
-class Graph168Hrs(APIView):
-    def get(self, request, *args, **kwargs):
-        dataSensor = get_list_or_404(
-            QueryData.contextQuery(
-                sensor=kwargs.get('sensor'), model=DataSensor, time=171
-            )[:10080]
-        )
-        serializer = GraphSerializer(
-            instance=dataSensor,
-            many=True
-        )
-        return Response(serializer.data)
-
-
-class Graph720Hrs(APIView):
-    def get(self, request, *args, **kwargs):
-        dataSensor = get_list_or_404(
-            QueryData.contextQuery(
-                sensor=kwargs.get('sensor'), model=DataSensor, time=720
-            )[:10080]
-        )
-        serializer = GraphSerializer(
-            instance=dataSensor,
-            many=True
-        )
-        return Response(serializer.data)
-
-
-class ScatterGraph_1Hr(APIView):
-    def get(self, request, *args, **kwargs):
-        pass
-
-
-class Stats24Hrs(APIView):
-    hours: int = 27
+class Stats24Hrs(APIView, GenericStats):
+    '''
+    O Postgres sempre retorna 3 horas a menos na consulta,
+    não me pergunte o porquê.
+    '''
+    time: int = 27
+    model = DataSensor
 
     def get(self, *args, **kwargs):
         sensor = kwargs.get('sensor')
         querySet = QueryData.contextQuery(
-            sensor, DataSensor, self.hours
-        )
-        extract = ExtractData(querySet)
-        arrayTemp = extract.getArrayTemp()
-        arrayHumi = extract.getArrayHumi()
-        arrayPress = extract.getArrayPress()
-
-        statsFactory = ConcreteStats()
-
-        tempStats = statsFactory.createTemperatureStats(
-            Max.getMax(arrayTemp),
-            Min.getMin(arrayTemp),
-            Average.getAverage(arrayTemp),
-            StdDeviation.getStdDeviaton(arrayTemp)
-        )
-        humiStats = statsFactory.createHUmidityStats(
-            Max.getMax(arrayHumi),
-            Min.getMin(arrayHumi),
-            Average.getAverage(arrayHumi),
-            StdDeviation.getStdDeviaton(arrayHumi)
-        )
-        pressStats = statsFactory.createHUmidityStats(
-            Max.getMax(arrayPress),
-            Min.getMin(arrayPress),
-            Average.getAverage(arrayPress),
-            StdDeviation.getStdDeviaton(arrayPress)
+            sensor, self.model, self.time
         )
 
         serializer = StatsSerializer(
-            instance=[tempStats, humiStats, pressStats],
+            instance=self.statsGenericFactory(querySet),
             many=True
         )
         return Response(serializer.data)
 
 
-class Stats168Hrs(APIView):
-    pass
+class Stats168Hrs(APIView, GenericStats):
+    '''
+    O Postgres sempre retorna 3 horas a menos na consulta,
+    não me pergunte o porquê.
+    '''
+    time: int = 171
+    model = DataSensor
+
+    def get(self, *args, **kwargs):
+        sensor = kwargs.get('sensor')
+        querySet = QueryData.contextQuery(
+            sensor, self.model, self.time
+        )
+
+        serializer = StatsSerializer(
+            instance=self.statsGenericFactory(querySet),
+            many=True
+        )
+        return Response(serializer.data)
