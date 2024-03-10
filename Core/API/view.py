@@ -10,6 +10,18 @@ from django.shortcuts import get_list_or_404
 from Core.Utils.classesUtils import TimeUtils
 
 
+class QueryData:
+    @classmethod
+    def contextQuery(self, sensor, model, time: int):
+        return model.objects.filter(
+            Q(id_sensor=sensor) & Q(
+                date_hour__range=(
+                    TimeUtils.timeLast(time), TimeUtils.timeNow()
+                )
+            )
+        )
+
+
 class GraphSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataSensor
@@ -29,39 +41,51 @@ class GraphSerializer(serializers.ModelSerializer):
         return data
 
 
-class StatsSerializer(serializers.Serializer):
-    _max = serializers.FloatField()
-    _min = serializers.FloatField()
-    average = serializers.FloatField()
-    stdDV = serializers.FloatField()
+class Graph24Hrs(APIView):
+    def get(self, request, *args, **kwargs):
+        dataSensor = get_list_or_404(
+            QueryData.contextQuery(
+                sensor=kwargs.get('sensor'), model=DataSensor, time=27
+            )[:1440]
+        )
+        serializer = GraphSerializer(
+            instance=dataSensor,
+            many=True
+        )
+        return Response(serializer.data)
 
 
-class StatsFactoryInterface(ABC):
-    @abstractmethod
-    def createTemperatureStats(self): pass
+class Graph168Hrs(APIView):
+    def get(self, request, *args, **kwargs):
+        dataSensor = get_list_or_404(
+            QueryData.contextQuery(
+                sensor=kwargs.get('sensor'), model=DataSensor, time=171
+            )[:10080]
+        )
+        serializer = GraphSerializer(
+            instance=dataSensor,
+            many=True
+        )
+        return Response(serializer.data)
 
-    @abstractmethod
-    def createHUmidityStats(self): pass
 
-    @abstractmethod
-    def createPressureStats(self): pass
+class Graph720Hrs(APIView):
+    def get(self, request, *args, **kwargs):
+        dataSensor = get_list_or_404(
+            QueryData.contextQuery(
+                sensor=kwargs.get('sensor'), model=DataSensor, time=720
+            )[:10080]
+        )
+        serializer = GraphSerializer(
+            instance=dataSensor,
+            many=True
+        )
+        return Response(serializer.data)
 
 
-class ConcreteStats(StatsFactoryInterface):
-    def createTemperatureStats(
-        self, _max: float, _min: float, average: float, stdDV: float
-    ):
-        return Stats(_max, _min, average, stdDV)
-
-    def createHUmidityStats(
-        self, _max: float, _min: float, average: float, stdDV: float
-    ):
-        return Stats(_max, _min, average, stdDV)
-
-    def createPressureStats(
-        self, _max: float, _min: float, average: float, stdDV: float
-    ):
-        return Stats(_max, _min, average, stdDV)
+class ScatterGraph_1Hr(APIView):
+    def get(self, request, *args, **kwargs):
+        pass
 
 
 class Stats:
