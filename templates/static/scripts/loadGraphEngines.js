@@ -3,9 +3,9 @@
     todos os direitos reservados 2024 © BrainStorm Tecnologia
 */
 
-async function execStdDvAPIGraphs() {
-    await engineAPI24Hrs(urlAPI24)
-    await engineAPI168Hrs(urlAPI168)
+function execStdDvAPIGraphs() {
+    engineAPI24Hrs(urlAPIGRAPH24, urlAPISTATS24)
+    engineAPI168Hrs(urlAPI168, urlAPISTATS168)
 }
 
 window.addEventListener('load', () => {
