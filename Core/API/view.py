@@ -11,15 +11,66 @@ from Core.Utils.classesUtils import TimeUtils
 
 
 class QueryData:
-    @classmethod
-    def contextQuery(self, sensor, model, time: int):
-        return model.objects.filter(
-            Q(id_sensor=sensor) & Q(
+    def __init__(self, model, sensor, time: int) -> None:
+        self.model = model
+        self.sensor = sensor
+        self.time = time
+
+    def contextQuery(self):
+        return self.model.objects
+
+
+class QueryDecoratorInterface:
+    def __init__(self, query) -> None:
+        super().__init__()
+        self.queryInstance = query
+
+    def contextQuery(self):
+        return self.queryInstance.contextQuery()
+
+
+class QueryFiltered(QueryDecoratorInterface):
+    def __init__(self, query: QueryData) -> None:
+        super().__init__(query)
+
+    def contextQuery(self):
+        querySet = super().contextQuery()
+        return querySet.filter(
+            Q(id_sensor=self.queryInstance.sensor) & Q(
                 date_hour__range=(
-                    TimeUtils.timeLast(time), TimeUtils.timeNow()
+                    TimeUtils.timeLast(
+                        self.queryInstance.time
+                    ), TimeUtils.timeNow()
                 )
             )
         )
+
+
+class QueryScatter24ByValue(QueryDecoratorInterface):
+    def __init__(self, query: QueryData) -> None:
+        super().__init__(query)
+
+    def contextQuery(self):
+        query = super().contextQuery()
+        return query.values('date_hour', 'temperature', 'humidity')
+
+
+class GraphScatterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DataSensor
+        fields = [
+            'date_hour', 'temperature', 'humidity'
+        ]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        reg = r"(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})-\d{2}:\d{2}"
+        sub = r"\3/\2/\1 \4:\5"
+
+        data['date_hour'] = re.sub(reg, sub, data['date_hour'])
+        data['temperature'] = round(data['temperature'], 2)
+        data['humidity'] = round(data['humidity'], 2)
+        return data
 
 
 class GraphSerializer(serializers.ModelSerializer):
