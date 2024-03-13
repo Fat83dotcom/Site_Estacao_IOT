@@ -142,9 +142,22 @@ class Graph720Hrs(APIView):
         return Response(serializer.data)
 
 
-class ScatterGraph_1Hr(APIView):
+class ScatterGraph_24Hrs(APIView):
+    model = DataSensor
+    time: int = 27
+
     def get(self, request, *args, **kwargs):
-        pass
+        query = QueryScatter24ByValue(QueryFiltered(
+            QueryData(self.model, kwargs.get('sensor'), self.time))
+        )
+        dataSensor = get_list_or_404(
+            query.contextQuery()[:1440]
+        )
+        serializer = GraphScatterSerializer(
+            instance=dataSensor,
+            many=True
+        )
+        return Response(serializer.data)
 
 
 class Stats:
