@@ -93,11 +93,15 @@ class GraphSerializer(serializers.ModelSerializer):
 
 
 class Graph24Hrs(APIView):
+    model = DataSensor
+    time: int = 27
+
     def get(self, request, *args, **kwargs):
+        query = QueryFiltered(
+            QueryData(self.model, kwargs.get('sensor'), self.time)
+        )
         dataSensor = get_list_or_404(
-            QueryData.contextQuery(
-                sensor=kwargs.get('sensor'), model=DataSensor, time=27
-            )[:1440]
+            query.contextQuery()[:1440]
         )
         serializer = GraphSerializer(
             instance=dataSensor,
@@ -107,11 +111,15 @@ class Graph24Hrs(APIView):
 
 
 class Graph168Hrs(APIView):
+    model = DataSensor
+    time: int = 171
+
     def get(self, request, *args, **kwargs):
+        query = QueryFiltered(
+            QueryData(self.model, kwargs.get('sensor'), self.time)
+        )
         dataSensor = get_list_or_404(
-            QueryData.contextQuery(
-                sensor=kwargs.get('sensor'), model=DataSensor, time=171
-            )[:10080]
+            query.contextQuery()[:10080]
         )
         serializer = GraphSerializer(
             instance=dataSensor,
@@ -249,10 +257,10 @@ class Stats24Hrs(APIView, GenericStats):
     model = DataSensor
 
     def get(self, *args, **kwargs):
-        sensor = kwargs.get('sensor')
-        querySet = QueryData.contextQuery(
-            sensor, self.model, self.time
+        query = QueryFiltered(QueryData(
+            self.model, kwargs.get('sensor'), self.time)
         )
+        querySet = query.contextQuery()
 
         serializer = StatsSerializer(
             instance=self.statsGenericFactory(querySet),
@@ -270,10 +278,10 @@ class Stats168Hrs(APIView, GenericStats):
     model = DataSensor
 
     def get(self, *args, **kwargs):
-        sensor = kwargs.get('sensor')
-        querySet = QueryData.contextQuery(
-            sensor, self.model, self.time
+        query = QueryFiltered(QueryData(
+            self.model, kwargs.get('sensor'), self.time)
         )
+        querySet = query.contextQuery()
 
         serializer = StatsSerializer(
             instance=self.statsGenericFactory(querySet),
