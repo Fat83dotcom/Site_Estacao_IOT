@@ -6,6 +6,7 @@
 function execStdDvAPIGraphs() {
     engineAPI24Hrs(urlAPIGRAPH24, urlAPISTATS24)
     engineAPI168Hrs(urlAPI168, urlAPISTATS168)
+    engineChartAPIScatter(urlAPISCATTER24)
 }
 
 window.addEventListener('load', () => {
