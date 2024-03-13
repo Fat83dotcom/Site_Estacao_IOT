@@ -266,13 +266,19 @@
         </div>
     </section>
 
-    <div>
-        Dispersão Temperatura x Umidade
-        <section></section>
-        <section></section>
-        <section></section>
-        <section></section>
-    </div>
+    <h2 class="text-center m-3">Dispersão Temperatura x Umidade das últimas 24 hrs.</h2>
+    <div class="spinner-border spinner-border-xl" id="spinner-endScatter24"></div>
+    <section class="container-fluid text-center fade-sensor" id="fade-scatter24">
+        <div class="row row-col-2 m-3 d-flex  align-items-stretch">
+            <section class="col-md-8 col-12">
+                <h3 class="text-center m-3">Dispersão Temperatura x Umidade</h3>
+                <div class="graphs-background p-3">
+                    <canvas id="scatter"></canvas>
+                </div>
+            </section>
+        </div>
+    </section>
+
     <div>
         estatisticas ano
         <section></section>
@@ -301,11 +307,13 @@
 <script>let urlAPISTATS24 = 'http://127.0.0.1:8000/api/data_stats_24/{{idSensor}}'</script>
 <script>let urlAPI168 = 'http://127.0.0.1:8000/api/data_graph_168/{{idSensor}}'</script>
 <script>let urlAPISTATS168 = 'http://127.0.0.1:8000/api/data_stats_168/{{idSensor}}'</script>
+<script>let urlAPISCATTER24 = 'http://127.0.0.1:8000/api/data_scatter_24/{{idSensor}}'</script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.3/dist/chart.umd.min.js"></script>
 <script src="{% static 'scripts/comonFunctions.js' %}"></script>
 <script src="{% static 'scripts/chartFactoryLast24.js' %}"></script>
 <script src="{% static 'scripts/chartFactoryLast168.js' %}"></script>
+<script src="{% static 'scripts/scatterFactory24.js' %}"></script>
 
 <script src="{% static 'scripts/loadGraphEngines.js' %}"></script>
 
