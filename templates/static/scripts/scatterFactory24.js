@@ -131,21 +131,29 @@ const engineChartAPIScatter = urlScatter => {
     fetch(urlScatter)
       .then(response => {
         if (response.status !== 200) throw new Error(
-          'Dados não encontrados: ' + responseStats.statusText
+          'Dados não encontrados: ' + response.statusText
         )
         return response.json()
       })
       .then(dataScatter => {
-        let date = []
-        let humidity = []
-        let temperature = []
+        const date = []
+        const humidity = []
+        const temperature = []
         dataScatter.forEach(element => {
             date.push(element.date_hour)
             temperature.push(element.temperature)
             humidity.push(element.humidity)
         })
-    
+
         updateScatterChart24(date, temperature, humidity, data)    
         updateSpinner()
-    })
+        })
+        .catch((e) => {
+            const elementSensor = document.getElementById('fade-scatter24')
+            const elementSpin = document.getElementById('spinner-endScatter24')
+            elementSensor.style.opacity = 1
+            elementSpin.style.display = 'none'
+            elementSensor.innerHTML = 'Recarregue a página ou busque outro sensor...'
+            console.log(e)
+        })
 }
