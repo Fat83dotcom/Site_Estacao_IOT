@@ -90,10 +90,10 @@ function engineAPI24Hrs(urlGraph, urlStats) {
         return response.json()
       })
       .then(data => {
-        let date = []
-        let temperature = []
-        let humidity = []
-        let pressure = []
+        const date = []
+        const temperature = []
+        const humidity = []
+        const pressure = []
         data.forEach(element => {
           date.push(element.date_hour)
           temperature.push(element.temperature)
