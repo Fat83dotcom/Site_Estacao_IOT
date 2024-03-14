@@ -58,29 +58,32 @@ const options = {
 }
 
 const data = {
-    labels: date_hour,
+    labels: [],
     datasets: [
         {
             label: 'Temperatura',
-            data: temperature,
-            borderColor: "#000",
-            borderWidth: 1.5,
-            backgroundColor: 'rgb(79, 232, 95, 0.4)',
+            data: [],
+            borderColor: "rgba(255, 0, 0, 0.8)",
             yAxisID: 'y',
-            pointRadius: 1.5,
+            borderWidth: 1,
+            pointRadius: 1,
+            radius: 1,
+            cubicInterpolationMode: 'monotone',
+            fill: false,
         },
         {
             label: 'Umidade',
-            data: humidity,
-            borderColor: '#0ff',
-            borderWidth: 1.5,
-            backgroundColor: 'rgb(79, 232, 95, 0.4)',
+            data: [],
+            borderColor: "rgba(0, 0, 0, 0.8)",
             yAxisID: 'y1',
-            pointRadius: 1.5,
+            borderWidth: 1,
+            pointRadius: 1,
+            radius: 1,
+            cubicInterpolationMode: 'monotone',
+            fill: false,
         }
     ]
 }
-
 
 const config = {
     type: 'line',
@@ -88,21 +91,34 @@ const config = {
     options: options,
 }
 
-const updateScatterChart24 = (date_hour, temperature, humidity, config) => {
-    config.data.datasets.
-    scatterGraph24.update()
-    return data
-}
-
-
-
-
 const scatterGraph24Doc = document.getElementById('scatter')
 const scatterGraph24 = new Chart(scatterGraph24Doc, config);
 
+const updateScatterChart24 = (date_hour, temperature, humidity, configData) => {
+    if (configData.datasets[0].data.length > 0) {
+        configData.datasets[0].data.length = 0
+    }
+    if (configData.datasets[1].data.length > 0) {
+        configData.datasets[1].data.length = 0
+    }
+    if (configData.labels.length > 0) {
+        configData.labels.length = 0
+    }
+    temperature.forEach(element => {
+        configData.datasets[0].data.push(element)
+    })
+    humidity.forEach(element => {
+        configData.datasets[1].data.push(element)
+    })
+    date_hour.forEach(element => {
+        configData.labels.push(element)
+    })
+    scatterGraph24.update()
+}
+
 const updateSpinner = () => {
-    const contentA = document.getElementById('fade-sensor24')
-    const spinner = document.getElementById('spinner-end24')
+    const contentA = document.getElementById('fade-scatter24')
+    const spinner = document.getElementById('spinner-endScatter24')
     contentA.style.display = 'block'
     spinner.style.display = 'none'
     setTimeout(() => {
@@ -114,22 +130,22 @@ const updateSpinner = () => {
 const engineChartAPIScatter = urlScatter => {
     fetch(urlScatter)
       .then(response => {
-        if (responseStats.status !== 200) throw new Error(
+        if (response.status !== 200) throw new Error(
           'Dados não encontrados: ' + responseStats.statusText
         )
-        return responseStats.json()
+        return response.json()
       })
       .then(dataScatter => {
         let date = []
         let humidity = []
         let temperature = []
-        dataScatter.array.forEach(element => {
+        dataScatter.forEach(element => {
             date.push(element.date_hour)
-            date.push(element.temperature)
-            date.push(element.humidity)
+            temperature.push(element.temperature)
+            humidity.push(element.humidity)
         })
-        updateScatterChart24(date, temperature, humidity)
-        
+    
+        updateScatterChart24(date, temperature, humidity, data)    
         updateSpinner()
     })
 }
