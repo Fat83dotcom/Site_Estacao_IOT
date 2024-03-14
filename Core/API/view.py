@@ -191,24 +191,46 @@ class ConcreteStats(StatsFactoryInterface):
         return Stats(_max, _min, average, stdDV)
 
 
-class ExtractDataArrays:
+class ExtractDataArraysInterface:
     def __init__(self, querySet) -> None:
-        self.__temperature = []
-        self.__humidity = []
-        self.__pressure = []
-        for data in querySet:
-            self.__temperature.append(data.temperature)
-            self.__humidity.append(data.humidity)
-            self.__pressure.append(data.pressure)
+        self.querySet = querySet
+        self._array: list
 
-    def getArrayTemp(self) -> np.array:
-        return np.array(self.__temperature)
+    def getArray(self) -> np.array:
+        return np.array(self._array)
 
-    def getArrayHumi(self) -> np.array:
-        return np.array(self.__humidity)
 
-    def getArrayPress(self) -> np.array:
-        return np.array(self.__pressure)
+class ExtractDataArrayTemperature(ExtractDataArraysInterface):
+    def __init__(self, querySet) -> None:
+        super().__init__(querySet)
+        self._array = [
+            data.temperature for data in self.querySet
+        ]
+
+    def getArray(self) -> np.array:
+        return super().getArray()
+
+
+class ExtractDataArrayHumidity(ExtractDataArraysInterface):
+    def __init__(self, querySet) -> None:
+        super().__init__(querySet)
+        self._array = [
+            data.humidity for data in self.querySet
+        ]
+
+    def getArray(self) -> np.array:
+        return super().getArray()
+
+
+class ExtractDataArrayPressure(ExtractDataArraysInterface):
+    def __init__(self, querySet) -> None:
+        super().__init__(querySet)
+        self._array = [
+            data.pressure for data in self.querySet
+        ]
+
+    def getArray(self) -> np.array:
+        return super().getArray()
 
 
 class Max:
@@ -237,27 +259,31 @@ class StdDeviation:
 
 class GenericStatsInterface(ABC):
     @abstractmethod
-    def statsGenericFactory(self, sensor, time) -> list[ConcreteStats]: pass
+    def statsGenericFactory(self, query) -> list[ConcreteStats]: pass
 
 
 class GenericStats(GenericStatsInterface):
     def statsGenericFactory(
         self, querySet
     ) -> list[ConcreteStats]:
-        extract = ExtractDataArrays(querySet)
+
+        extract = [
+            ExtractDataArrayTemperature(querySet),
+            ExtractDataArrayHumidity(querySet),
+            ExtractDataArrayPressure(querySet)
+        ]
+        # extractTemp = ExtractDataArrayTemperature(querySet)
+        # extractHumi = ExtractDataArrayHumidity(querySet)
+        # extractPress = ExtractDataArrayPressure(querySet)
 
         return [
             ConcreteStats.createStats(
-                Max.getMax(array),
-                Min.getMin(array),
-                Average.getAverage(array),
-                StdDeviation.getStdDeviaton(array)
+                Max.getMax(array.getArray()),
+                Min.getMin(array.getArray()),
+                Average.getAverage(array.getArray()),
+                StdDeviation.getStdDeviaton(array.getArray())
             )
-            for array in [
-                extract.getArrayTemp(),
-                extract.getArrayHumi(),
-                extract.getArrayPress()
-            ]
+            for array in extract
         ]
 
 
