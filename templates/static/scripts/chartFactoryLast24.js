@@ -5,9 +5,9 @@
 
 
 
-let configTempDvStd24 = graphConfigFactory('°C')
-let configHumiDvStd24 = graphConfigFactory('%')
-let configPressDvStd24 = graphConfigFactory('hPa')
+let configTempDvStd24 = graphConfigFactory('°C', 'Temperatura')
+let configHumiDvStd24 = graphConfigFactory('%', 'Umidade')
+let configPressDvStd24 = graphConfigFactory('hPa', 'Pressão')
 
 const chartDvStdTemperatureDoc = document.getElementById('tempDvStdLast24').getContext('2d')
 const chartDvStdHumidityDoc = document.getElementById('humiDvStdLast24').getContext('2d')
@@ -80,7 +80,6 @@ function engineAPI24Hrs(urlGraph, urlStats) {
         stats.temperature = dataStats[0]
         stats.humidity = dataStats[1]
         stats.pressure = dataStats[2]
-        console.log(stats)
         return fetch(urlGraphs)
       })
 
