@@ -3,25 +3,33 @@
     todos os direitos reservados 2024 © BrainStorm Tecnologia
 */
 
-const graphConfigFactory = (ticks) => {
+const graphConfigFactory = (ticks, title) => {
     return {
         type: 'line',
         options: {
             responsive: true,
             maintainAspectRatio: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: `Gráfico ${title}`,
+                }
+            },
             scales: {
                 x: {
                     display: true,
-                    scaleLabel: {
+                    title: {
                         display: true,
-                        labelString: '',
-                    }
+                        text: 'Data',
+                        color: 'rgba(0, 0, 0, 0.6)'
+                    },
                 },
                 y: {
                     display: true,
-                    scaleLabel: {
+                    title: {
                         display: true,
-                        labelString: '',
+                        text: `${title}`,
+                        color: 'rgba(0, 0, 0, 0.6)'
                     },
                     beginAtZero: false,
                     ticks: {
@@ -58,7 +66,7 @@ const fillerStdAverange = (object, arrayTarget, average, stdDeviation) => {
             fill: {
                 target: '2',
             },
-            backgroundColor: 'rgb(79, 232, 95, 0.4)',
+            backgroundColor: 'rgba(79, 232, 95, 0.4)',
             borderDash: [5, 5],
             pointStyle: 'dash',
         },
@@ -80,7 +88,7 @@ const fillerStdAverange = (object, arrayTarget, average, stdDeviation) => {
                 target: '-1',
             },
             borderDash: [5, 5],
-            backgroundColor: 'rgb(79, 232, 95, 0.4)',
+            backgroundColor: 'rgba(79, 232, 95, 0.4)',
             pointStyle: 'dash',
         }
     ]
