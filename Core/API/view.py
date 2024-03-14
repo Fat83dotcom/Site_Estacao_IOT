@@ -112,7 +112,7 @@ class Graph24Hrs(APIView):
 
 class Graph168Hrs(APIView):
     model = DataSensor
-    time: int = 171
+    time: int = 75
 
     def get(self, request, *args, **kwargs):
         query = QueryFiltered(
@@ -272,9 +272,6 @@ class GenericStats(GenericStatsInterface):
             ExtractDataArrayHumidity(querySet),
             ExtractDataArrayPressure(querySet)
         ]
-        # extractTemp = ExtractDataArrayTemperature(querySet)
-        # extractHumi = ExtractDataArrayHumidity(querySet)
-        # extractPress = ExtractDataArrayPressure(querySet)
 
         return [
             ConcreteStats.createStats(
@@ -299,7 +296,7 @@ class Stats24Hrs(APIView, GenericStats):
         query = QueryFiltered(QueryData(
             self.model, kwargs.get('sensor'), self.time)
         )
-        querySet = query.contextQuery()
+        querySet = get_list_or_404(query.contextQuery())
 
         serializer = StatsSerializer(
             instance=self.statsGenericFactory(querySet),
@@ -313,14 +310,14 @@ class Stats168Hrs(APIView, GenericStats):
     O Postgres sempre retorna 3 horas a menos na consulta,
     não me pergunte o porquê.
     '''
-    time: int = 171
+    time: int = 75
     model = DataSensor
 
     def get(self, *args, **kwargs):
         query = QueryFiltered(QueryData(
             self.model, kwargs.get('sensor'), self.time)
         )
-        querySet = query.contextQuery()
+        querySet = get_list_or_404(query.contextQuery())
 
         serializer = StatsSerializer(
             instance=self.statsGenericFactory(querySet),
