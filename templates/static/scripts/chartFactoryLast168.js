@@ -3,9 +3,9 @@
     todos os direitos reservados 2024 © BrainStorm Tecnologia
 */
 
-let configTempDvStd168 = graphConfigFactory('°C')
-let configHUmiDvStd168 = graphConfigFactory('%')
-let configPressDvStd168 = graphConfigFactory('hPa')
+let configTempDvStd168 = graphConfigFactory('°C', 'Temperatura')
+let configHUmiDvStd168 = graphConfigFactory('%', 'Umidade')
+let configPressDvStd168 = graphConfigFactory('hPa', 'Pressão')
 
 const chartDvStdTemperatureDoc168 = document.getElementById('tempDvStdLast168').getContext('2d')
 const chartDvStdHumidityDoc168 = document.getElementById('humiDvStdLast168').getContext('2d')
@@ -78,7 +78,6 @@ function engineAPI168Hrs(urlGraphs, urlStats) {
         stats.temperature = dataStats[0]
         stats.humidity = dataStats[1]
         stats.pressure = dataStats[2]
-        console.log(stats)
         return fetch(urlGraphs)
       })
       .then(response => {
