@@ -55,6 +55,15 @@ class QueryScatter24ByValue(QueryDecoratorInterface):
         return query.values('date_hour', 'temperature', 'humidity')
 
 
+class QueryGetListOr404(QueryDecoratorInterface):
+    def __init__(self, query) -> None:
+        super().__init__(query)
+
+    def contextQuery(self):
+        query = super().contextQuery()
+        return get_list_or_404(query)
+
+
 class GraphScatterSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataSensor
@@ -97,12 +106,11 @@ class Graph24Hrs(APIView):
     time: int = 27
 
     def get(self, request, *args, **kwargs):
-        query = QueryFiltered(
-            QueryData(self.model, kwargs.get('sensor'), self.time)
+        query = QueryGetListOr404(QueryFiltered(
+            QueryData(self.model, kwargs.get('sensor'), self.time))
         )
-        dataSensor = get_list_or_404(
-            query.contextQuery()[:1440]
-        )
+        dataSensor = query.contextQuery()[:1440]
+
         serializer = GraphSerializer(
             instance=dataSensor,
             many=True
@@ -111,30 +119,16 @@ class Graph24Hrs(APIView):
 
 
 class Graph168Hrs(APIView):
+    '''Gráfico 3 dias'''
     model = DataSensor
     time: int = 75
 
     def get(self, request, *args, **kwargs):
-        query = QueryFiltered(
-            QueryData(self.model, kwargs.get('sensor'), self.time)
+        query = QueryGetListOr404(QueryFiltered(
+            QueryData(self.model, kwargs.get('sensor'), self.time))
         )
-        dataSensor = get_list_or_404(
-            query.contextQuery()[:10080]
-        )
-        serializer = GraphSerializer(
-            instance=dataSensor,
-            many=True
-        )
-        return Response(serializer.data)
+        dataSensor = query.contextQuery()[:10080]
 
-
-class Graph720Hrs(APIView):
-    def get(self, request, *args, **kwargs):
-        dataSensor = get_list_or_404(
-            QueryData.contextQuery(
-                sensor=kwargs.get('sensor'), model=DataSensor, time=720
-            )[:10080]
-        )
         serializer = GraphSerializer(
             instance=dataSensor,
             many=True
@@ -147,12 +141,11 @@ class ScatterGraph_24Hrs(APIView):
     time: int = 27
 
     def get(self, request, *args, **kwargs):
-        query = QueryScatter24ByValue(QueryFiltered(
-            QueryData(self.model, kwargs.get('sensor'), self.time))
+        query = QueryGetListOr404(QueryScatter24ByValue(QueryFiltered(
+            QueryData(self.model, kwargs.get('sensor'), self.time)))
         )
-        dataSensor = get_list_or_404(
-            query.contextQuery()[:1440]
-        )
+        dataSensor = query.contextQuery()[:1440]
+
         serializer = GraphScatterSerializer(
             instance=dataSensor,
             many=True
@@ -293,10 +286,10 @@ class Stats24Hrs(APIView, GenericStats):
     model = DataSensor
 
     def get(self, *args, **kwargs):
-        query = QueryFiltered(QueryData(
-            self.model, kwargs.get('sensor'), self.time)
+        query = QueryGetListOr404(QueryFiltered(QueryData(
+            self.model, kwargs.get('sensor'), self.time))
         )
-        querySet = get_list_or_404(query.contextQuery())
+        querySet = query.contextQuery()
 
         serializer = StatsSerializer(
             instance=self.statsGenericFactory(querySet),
@@ -314,10 +307,10 @@ class Stats168Hrs(APIView, GenericStats):
     model = DataSensor
 
     def get(self, *args, **kwargs):
-        query = QueryFiltered(QueryData(
-            self.model, kwargs.get('sensor'), self.time)
+        query = QueryGetListOr404(QueryFiltered(QueryData(
+            self.model, kwargs.get('sensor'), self.time))
         )
-        querySet = get_list_or_404(query.contextQuery())
+        querySet = query.contextQuery()
 
         serializer = StatsSerializer(
             instance=self.statsGenericFactory(querySet),
