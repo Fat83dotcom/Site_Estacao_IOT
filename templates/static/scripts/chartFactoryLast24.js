@@ -82,7 +82,6 @@ function engineAPI24Hrs(urlGraph, urlStats) {
         stats.pressure = dataStats[2]
         return fetch(urlGraphs)
       })
-
       .then(response => {
         if (response.status !== 200) throw new Error(
           'Dados não encontrados: ' + response.statusText
@@ -100,7 +99,6 @@ function engineAPI24Hrs(urlGraph, urlStats) {
           humidity.push(element.humidity)
           pressure.push(element.pressure)
         })
-
         updateChartStdDeviation(
           configTempDvStd24,
           chartTempDvStdLast24,
@@ -128,7 +126,6 @@ function engineAPI24Hrs(urlGraph, urlStats) {
           stats.pressure.average,
           stats.pressure.stdDV
         )
-
         updateStatsTemperature(
           stats.temperature.average,
           stats.temperature.stdDV,
