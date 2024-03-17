@@ -8,7 +8,7 @@
                     <select name="selectSensor" class="form-select" aria-label="Default select example">
                         <option selected value="default">Selecione um Sensor</option>
                         {% for sensor in sensors %}
-                            <option value="{{sensor.id_sen}}">{{sensor.mac}}</option>
+                            <option value="{{sensor.id_sen}}">{{sensor}}</option>
                         {% endfor %}
                     </select>
                     <div class="m-3 text-center">
