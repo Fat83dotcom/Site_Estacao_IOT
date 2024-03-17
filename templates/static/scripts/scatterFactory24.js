@@ -1,3 +1,8 @@
+/*  Desenvolvido por: BrainStorm Tecnologia 
+    Desenvolvedor: Fernando Mendes
+    todos os direitos reservados 2024 © BrainStorm Tecnologia
+*/
+
 const options = {
     responsive: true,
     interaction: {
