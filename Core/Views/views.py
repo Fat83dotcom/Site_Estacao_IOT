@@ -6,17 +6,20 @@ from django.shortcuts import render, redirect
 
 class Index(View):
     template = 'index/index.html'
+    title = 'Home'
 
     def get(self, request) -> HttpResponse:
         query = Sensor.objects.all()
         context = {
-            'sensors': query
+            'sensors': query,
+            'title': self.title
         }
         return render(request, self.template, context)
 
 
 class SensorView(View):
     template = 'sensor/sensors.html'
+    title = 'Sensor'
 
     def post(self, request) -> HttpResponse:
         idSensor = request.POST.get('selectSensor')
@@ -31,6 +34,7 @@ class SensorView(View):
             'getSensors': getAllSensors,
             'currentSensor': getCurrentSensor,
             'idSensor': idSensor,
+            'title': self.title
         }
         return render(request, self.template, context)
 
@@ -40,6 +44,10 @@ class SensorView(View):
 
 class AboutView(View):
     template = 'about/about.html'
+    title = 'Sobre'
 
     def get(self, request) -> HttpResponse:
-        return render(request, self.template)
+        context = {
+            'title': self.title
+        }
+        return render(request, self.template, context)
