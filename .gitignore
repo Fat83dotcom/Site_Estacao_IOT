@@ -164,3 +164,6 @@ teste.py
 *.db
 teste.js
 testedispersao.html
+texto*.txt
+
+images/media/*.png
