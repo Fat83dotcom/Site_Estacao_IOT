@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.views.generic import View
-from Core.models import Sensor
+from Core.models import Sensor, Pictures
 from django.shortcuts import render, redirect
 
 
@@ -47,7 +47,9 @@ class AboutView(View):
     title = 'Sobre'
 
     def get(self, request) -> HttpResponse:
+        images = Pictures.objects.all()
         context = {
-            'title': self.title
+            'images': images,
+            'title': self.title,
         }
         return render(request, self.template, context)
