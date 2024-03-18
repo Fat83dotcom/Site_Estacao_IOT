@@ -21,7 +21,7 @@ class QueryData:
 
 
 class QueryDecoratorInterface:
-    def __init__(self, query) -> None:
+    def __init__(self, query: QueryData) -> None:
         super().__init__()
         self.queryInstance = query
 
