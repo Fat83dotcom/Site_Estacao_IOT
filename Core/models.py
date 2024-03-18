@@ -45,3 +45,11 @@ class DataSensor(models.Model):
     def __str__(self):
         str_ = f'{self.id_data_sensor}-> {self.id_sensor.id_sen}-> {self.date_hour}'
         return str_
+
+
+class Pictures(models.Model):
+    name = models.CharField(max_length=20, default='pic')
+    picture = models.ImageField(upload_to='media')
+
+    def __str__(self) -> str:
+        return f'{self.name}'
