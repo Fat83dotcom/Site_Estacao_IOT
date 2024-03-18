@@ -1,7 +1,34 @@
 {% extends 'global/base.html' %}
 {% load static %}
 {% block content %}
-<section>
-    <h2>About</h2>
+<section class="row">
+    <section class="col-md-8 col-12">
+        <h2 class="text-center">Sobre o projeto:</h2>
+        <p>A estação meteorológica Brainstorm Tecnologia é um projeto experimental destinado à aplicação prática de conceitos e tecnologias adquiridos durante o curso de Análise e Desenvolvimento de Sistemas. Seu objetivo principal é alimentar um banco de dados com informações sobre temperatura, umidade e pressão atmosférica, coletadas por sensores distribuídos em vários locais, os quais são integrados automaticamente ao sistema através do firmware desenvolvido especificamente para o projeto.
+        </p>
+        <p>A coleta de dados é realizada utilizando um ESP32 em conjunto com um sensor BME280, ambos conectados a uma rede doméstica Wi-Fi.
+        </p>
+        <p>O controle dos sensores é realizado por um cliente MQTT, que, por meio de um sistema de publicação/assinatura, envia solicitações aos sensores, os quais respondem com os dados correspondentes. Esses dados são então processados e armazenados no banco de dados pelo cliente MQTT.
+        </p>
+        <p>Por fim, um aplicativo web foi desenvolvido para possibilitar a visualização dos dados gravados. Para acessar essas informações, basta selecionar o sensor desejado na lista de sensores disponíveis.
+        </p>
+        <p>Para obter mais detalhes técnicos e acesso ao código-fonte do projeto, visite <a class="link-style" href="https://github.com/Fat83dotcom" target="_blank" rel="noopener noreferrer">o portfólio do desenvolvedor</a> .
+        </p>
+        <p>Se você deseja contribuir com o projeto fornecendo um sensor, entre em contato através do e-mail <a class="link-style" href="mailto:fernando.quimic@gmail.com">fernando.quimic@gmail.com</a>.
+        </p>
+        <h2 class="text-center">Sobre o desenvolvedor:</h2>
+        <p>Fernando Mendes é formado em Analise e Desenvolvimento de Sistemas, e desenvolvedor Python.</p>
+        <h5>Contatos:</h5>
+        <p>email: <a class="link-style" href="mailto:fernando.quimic@gmail.com">fernando.quimic@gmail.com</a></p>
+
+    </section>
+    <section class="col-md-4 col-12">
+        {% for pic in images %}
+            {% if pic.name == 'arquitetura' %}
+                <img src="{{pic.picture.url}}" class="img-thumbnail" alt="Imagens">
+                <h6 class="text-center m-2">Arquitetura do Sistema</h6>
+            {% endif %}
+        {% endfor %}
+    </section>
 </section>
 {% endblock %}
