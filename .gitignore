@@ -167,3 +167,6 @@ testedispersao.html
 texto*.txt
 
 images/media/*.png
+images/media/*.jpg
+*.png
+*.jpg
