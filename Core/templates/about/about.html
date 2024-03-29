@@ -16,17 +16,28 @@
         </p>
         <p>Se você deseja contribuir com o projeto fornecendo um sensor, entre em contato através do e-mail <a class="link-style" href="mailto:fernando.quimic@gmail.com">fernando.quimic@gmail.com</a>.
         </p>
-        <h2 class="text-center">Sobre o desenvolvedor:</h2>
-        <p>Fernando Mendes é formado em Analise e Desenvolvimento de Sistemas, e desenvolvedor Python.</p>
-        <h5>Contatos:</h5>
-        <p>email: <a class="link-style" href="mailto:fernando.quimic@gmail.com">fernando.quimic@gmail.com</a></p>
-
     </section>
     <section class="col-md-4 col-12">
         {% for pic in images %}
             {% if pic.name == 'arquitetura' %}
                 <img src="{{pic.picture.url}}" class="img-thumbnail" alt="Imagens">
                 <h6 class="text-center m-2">Arquitetura do Sistema</h6>
+            {% endif %}
+        {% endfor %}
+    </section>
+</section>
+<section class="row">
+    <section class="col-md-8 col-12">
+        <h2 class="text-center">Sobre o desenvolvedor:</h2>
+        <p>Fernando Mendes é formado em Analise e Desenvolvimento de Sistemas, e desenvolvedor Python.</p>
+        <h5>Contatos:</h5>
+        <p>email: <a class="link-style" href="mailto:fernando.quimic@gmail.com">fernando.quimic@gmail.com</a></p>
+    </section>
+    <section class="col-md-4 col-12">
+        {% for pic in images %}
+            {% if pic.name == 'esquema' %}
+                <img src="{{pic.picture.url}}" class="img-thumbnail" alt="Imagens">
+                <h6 class="text-center m-2">Esquema de Ligação</h6>
             {% endif %}
         {% endfor %}
     </section>
