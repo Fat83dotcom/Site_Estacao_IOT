@@ -1,4 +1,4 @@
-from .models import Localization, Sensor, DataSensor, Pictures
+from .models import Localization, Sensor, DataSensor, Pictures, FavPicture
 from django.contrib import admin
 
 
@@ -21,3 +21,8 @@ class DataSensorAdmin(admin.ModelAdmin):
 @admin.register(Pictures)
 class PituresAdmin(admin.ModelAdmin):
     list_display = ('name', 'picture')
+
+
+@admin.register(FavPicture)
+class FavPictureAdmin(admin.ModelAdmin):
+    list_display = ('name',)
