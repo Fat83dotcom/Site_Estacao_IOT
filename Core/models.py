@@ -1,4 +1,5 @@
 from django.db import models
+from Core.Utils.images import resizeImage
 
 
 class Localization(models.Model):
@@ -53,3 +54,22 @@ class Pictures(models.Model):
 
     def __str__(self) -> str:
         return f'{self.name}'
+
+
+class FavPicture(models.Model):
+    name = models.CharField(max_length=20, default='pic')
+    favIcon = models.ImageField(upload_to='favIcon', blank=True, null=True)
+
+    def save(self, *args, **kwargs) -> None:
+        currentFaviconName = str(self.name)
+        super().save(*args, **kwargs)
+        favIconChanged = currentFaviconName = False
+
+        if self.favIcon:
+            favIconChanged = currentFaviconName != self.name
+
+        if favIconChanged:
+            resizeImage(self.favIcon, 64)
+
+    def __str__(self) -> str:
+        return self.name
