@@ -1,6 +1,13 @@
 <nav class="down-shad change-color-header navbar navbar-expand-lg navbar-dark position-sticky top-0">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'index' %}">BrainStorm</a>
+    
+    <a class="navbar-brand" href="{% url 'index' %}">
+      {% if favicon_64.favIcon %}
+      <span class="me-1 ms-3">
+        <img class="img-fluid" src="{{ favicon_64.favIcon.url }}" alt="Logo">
+      </span>
+    {% endif %}
+      BrainStorm</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
       aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
