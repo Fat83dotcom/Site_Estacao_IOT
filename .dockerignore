@@ -1,0 +1,22 @@
+# Arquivos e diretórios específicos do Django que geralmente não são necessários no contêiner Docker
+*.pyc
+*.pyo
+__pycache__
+db.sqlite3
+
+# Diretórios que podem conter arquivos estáticos ou arquivos de mídia gerados pelo Django
+/static
+/media
+
+# Arquivos ou diretórios específicos para ambientes de desenvolvimento local que não são necessários no contêiner Docker
+.env
+*.log
+
+# Diretórios de dependências ou ambiente virtual (se você estiver usando um)
+/venv
+/.venv
+/node_modules
+venv/*
+
+# Arquivos específicos de controle de versão que não são necessários no contêiner Docker
+.git

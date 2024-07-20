@@ -168,3 +168,7 @@ texto*.txt
 
 *.png
 *.jpg
+archives/
+web/
+data/
+.env.nginx

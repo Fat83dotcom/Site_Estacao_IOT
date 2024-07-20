@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: app.dockerfile
+    container_name: django
+    restart: always
+    env_file: 
+      - ./env_files/.env
+    volumes:
+      - ./app:/app
+      - ./web/static:/web/static
+      - ./web/media:/web/media
+    ports:
+      - 8000:8000
+    expose:
+      - 8000
+    networks:
+      - internal-network
+    depends_on:
+      - psql
+  
+  psql:
+    image: postgres:15.7-bullseye
+    container_name: psql
+    restart: always
+    env_file: 
+      - ./env_files/.env
+    ports:
+      - 5432:5432
+    networks:
+      - internal-network
+    volumes:
+      - ./data/postgres/data:/var/lib/postgresql/data
+
+networks:
+  internal-network:
+    driver: bridge
