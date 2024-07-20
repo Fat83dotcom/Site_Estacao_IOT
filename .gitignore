@@ -172,3 +172,4 @@ archives/
 web/
 data/
 .env.nginx
+settings.py
